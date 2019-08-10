@@ -1,3 +1,7 @@
+# Wedding RSVP fork 💍
+
+This is a fork to re-design neoskop's awesome chat bot into an interactive rsvp form for a wedding.
+
 # Chatbot with Angular and Ink
 
 Learn more about the project here: [https://www.neoskop.de/blog/simple-chatbots-with-angular-and-ink](https://www.neoskop.de/blog/simple-chatbots-with-angular-and-ink)

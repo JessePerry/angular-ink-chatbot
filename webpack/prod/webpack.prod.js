@@ -92,7 +92,7 @@ module.exports = {
       hash: false,
       inject: true,
       compile: true,
-      favicon: false,
+      favicon: './src/assets/images/favicon.ico',
       minify: false,
       cache: true,
       showErrors: true,
