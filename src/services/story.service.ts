@@ -70,12 +70,12 @@ export class StoryService {
       if (this.story.canContinue) {
         const storyPoint = this.buildStoryPointFromMessage(this.story.Continue());
 
-        setTimeout(() => {
-          this.storyPoints.push(storyPoint);
-          this.events.next({
-            type: StoryEventType.STORY_POINT_ADDED,
-            data: storyPoint
-          });
+                setTimeout(() => {
+        this.storyPoints.push(storyPoint);
+        this.events.next({
+          type: StoryEventType.STORY_POINT_ADDED,
+          data: storyPoint
+        });
 
           this.proceed();
         }, storyPoint.options.delay);
@@ -103,8 +103,8 @@ export class StoryService {
     const customOptions: StoryPointOptions = JSON.parse(tag);
 
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 2000,
-      sender: StoryPointSender.BOT,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 1500,
+      sender: customOptions.sender,
     }, customOptions);
   }
 

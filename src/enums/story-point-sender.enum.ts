@@ -1,4 +1,5 @@
 export enum StoryPointSender {
-  BOT = 0,
-  USER = 1
+  NORMAL = 0,
+  DIALOG = 1,
+  USER = 2
 }

@@ -13,12 +13,17 @@
   }
 }
 
+.message--dialog {
+  & > .message__inner {
+    box-shadow: var(--ff-drop-shadow);
+    background-color:  #fff;
+  }
+}
+
 .message__inner {
   display: inline-block;
   max-width: 90%;
   padding: var(--ff-spacing-m) var(--ff-spacing-l);
   border-radius: var(--ff-small-border-radius);
-  background-color: #fff;
   transform-origin: left;
-  box-shadow: var(--ff-drop-shadow);
 }

@@ -490,7 +490,7 @@ template {
   padding: 8px 16px;
   border-radius: 4px;
   color: #fff;
-  background-color: #0083FF;
+  background-color: #6C93AE;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 1.6rem;
   font-weight: 400;
@@ -511,7 +511,7 @@ template {
   border: none;
   border-radius: 4px;
   color: #fff;
-  background-color: #0083FF;
+  background-color: #6C93AE;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 1.6rem;
   font-weight: 400;
@@ -547,10 +547,16 @@ template {
 
 .message--user > .message__inner {
   color: #fff;
-  background-color: #0083FF;
+  background-color: #6C93AE;
   -webkit-transform-origin: right;
       -ms-transform-origin: right;
           transform-origin: right;
+}
+
+.message--dialog > .message__inner {
+  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .12);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .12);
+  background-color:  #fff;
 }
 
 .message__inner {
@@ -558,12 +564,9 @@ template {
   max-width: 90%;
   padding: 8px 16px;
   border-radius: 4px;
-  background-color: #fff;
   -webkit-transform-origin: left;
       -ms-transform-origin: left;
           transform-origin: left;
-  -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .12);
-          box-shadow: 0 2px 6px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .12);
 }
 
 .message-panel {
@@ -571,7 +574,7 @@ template {
   display: -ms-flexbox;
   display: flex;
   max-height: 100vh;
-  padding-top: 60px;
+  padding-top: 20px;
   padding-bottom: 60px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -580,9 +583,9 @@ template {
 }
 
 .message-panel__avatar {
-  width: 300px;
+  width: 200px;
   margin-right: auto;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
   margin-left: auto
 }
 
@@ -669,7 +672,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-strong {
+.quot {
+  font-style: italic;
   font-weight: 600;
 }
 
