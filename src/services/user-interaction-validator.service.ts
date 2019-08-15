@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UserInteractionValidatorService {
-  constructor() {}
+  constructor() { }
 
   public validate(validator: string, value: any): string | null {
     const validatorFnName = 'validate' + validator.charAt(0).toUpperCase() + validator.slice(1);
@@ -23,6 +23,16 @@ export class UserInteractionValidatorService {
       return null;
     } else {
       return 'date';
+    }
+  }
+
+  private validateName(value: any): string | null {
+    console.log(`validateName: ${value}`);
+    value = String(value);
+    if (value === '') {
+      return 'nameIsEmpty'
+    } else {
+      return null
     }
   }
 }

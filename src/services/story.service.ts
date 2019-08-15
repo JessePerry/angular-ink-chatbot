@@ -26,7 +26,7 @@ export class StoryService {
     private userInteractionValidatorService: UserInteractionValidatorService
   ) {
     this.events = new Subject();
-    this.story = new inkjs.Story(require('../ink/story.json'));
+    this.story = new inkjs.Story(require('../ink/Wedding.ink.json'));
     this.storyPoints = [];
 
     this.userInteractionHandlerService.init(this.story);
@@ -103,7 +103,7 @@ export class StoryService {
     const customOptions: StoryPointOptions = JSON.parse(tag);
 
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 1500,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 100, // 1500,
       sender: customOptions.sender,
     }, customOptions);
   }
