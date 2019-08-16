@@ -6,8 +6,12 @@ VAR age = 0
 VAR birthday = "06/16/1989"
 VAR validationError = 0
 
+-> start
+
+= start
 BIOTA, November 1st, 2019
 You get out of your car and arrive at the wedding just on time (5pm!) and follow a beautifully trimmed hedgeline up to the entrance.
+IMAGE: https://
 // hedge? I dunno
 
 -> entry
@@ -88,7 +92,7 @@ todo: correct choice so reward player. write reaction.
 
 todo: make fun of player for getting the choice wrong, show game end.
 
--> END
+-> start_over
 
 === spaceTheme
 ~ dress = 2
@@ -151,25 +155,31 @@ You successfully avoided Karen! 100 points.
 You hear quiet voice over a PA system:
 "Ladies and Gentlemen would you please be seated as the bride and groom will be arriving shortly." # { "sender": 1 }
 
--> END
+-> start_over
 
 === hiKaren
 
 "{name}! I havent seen you in forever, you look amazing, I love your outfit but it's a bit out there huh? You're so brave! I feel like I made a mistake with these heels, haha" # { "sender": 1 }
 
-// Vows, speak now or forever hold your peace
+todo:  Vows, speak now or forever hold your peace
 
-// interrupt to say this wedding's a sham and get killed by guests.
+interrupt to say this wedding's a sham and get killed by guests.
 
-// Begin reception giving dietary requirements
-// Meet Jesse and Lil briefly
-// Choose kids table or not.
-// Eat too much
-// Drink too much
-// Dancing Hurt yourself
-// Dancing impress everyone
+todo:  Begin reception giving dietary requirements
+todo:  Meet Jesse and Lil briefly
+todo:  Choose kids table or not.
+todo:  Eat too much
+todo:  Drink too much
+todo:  Dancing Hurt yourself
+todo:  Dancing impress everyone
 
-// How to finish?
-// Choices have cause and effect!
+todo:  How to finish?
+todo:  Choices have cause and effect!
 
+-> start_over
+
+== start_over
+- Want to start over?
+    + Sure. -> start # { "sender": 1 }
+    + No, thank you. # { "sender": 1 }
 -> END
