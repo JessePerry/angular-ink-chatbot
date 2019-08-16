@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class UserInteractionHandlerService {
   private story: any;
 
-  constructor() {}
+  constructor() { }
 
   public init(story: any) {
     this.story = story;
@@ -32,16 +32,27 @@ export class UserInteractionHandlerService {
       capitalName += namePart.charAt(0).toUpperCase() + namePart.slice(1).toLowerCase() + ' ';
     });
     capitalName = capitalName.trim();
-    let firstChar = capitalName.toLowerCase()[0];
+    const firstChar = this.getAppropriateEarlierAlphaLetter(capitalName.toLowerCase()[0]);
+    console.log(`${firstChar} + ${capitalName.charAt(0).toLowerCase()} + ${capitalName.slice(1)}`)
+    let nameLowerAlpha = ''
     if (firstChar === 'a') {
-      firstChar = 'z'
+      nameLowerAlpha = 'A' + capitalName.charAt(0).toLowerCase() + capitalName.slice(1);
     } else {
-      firstChar = String.fromCharCode(firstChar.charCodeAt(0) - 1);
+      nameLowerAlpha = firstChar.toUpperCase() + capitalName.slice(1);
     }
-    const nameLowerAlpha = firstChar.toUpperCase() + capitalName.slice(1);
 
     console.log(`nameHandler name: ${value} into ${capitalName} and nameLowerAlpha ${nameLowerAlpha}`);
     this.story.variablesState.$('name', capitalName);
     this.story.variablesState.$('nameLowerAlpha', nameLowerAlpha);
+  }
+
+  private getAppropriateEarlierAlphaLetter(letter: string): string {
+    if (letter === 'a') { return letter; } // Don't loop to z. Eg: Aaron would be Aaaron
+    const acceptableLetters = /[abcdfghjkmnpqrstvqxyz]/g // Don't use vowels or I or L because of font readability
+    letter = String.fromCharCode(letter.charCodeAt(0) - 1);
+    if (letter.match(acceptableLetters) === null) {
+      letter = this.getAppropriateEarlierAlphaLetter(letter)
+    }
+    return letter;
   }
 }

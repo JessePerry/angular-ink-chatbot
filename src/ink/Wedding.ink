@@ -1,7 +1,7 @@
 VAR name = ""
 VAR nameEntry = ""
 VAR nameLowerAlpha = ""
-VAR dress = 0 // 1 blackTieOptional, 2 space
+VAR dress = 0 // 1 cocktail, 2 space
 VAR age = 0
 VAR birthday = "06/16/1989"
 VAR validationError = 0
@@ -16,8 +16,10 @@ You get out of your car and arrive at the wedding just on time (5pm!) and follow
 A smartly dressed man greets you at the front door.
 "Good afternoon! Are you here for the wedding of Jesse and Lillian?" # { "sender": 1 }
 
-+ "I am."    -> iam
-+ "You bet I am!"    -> iamenthused # { "sender": 2 }
++ "I am." # { "sender": 2 }
+-> iam
++ "You bet I am!" # { "sender": 2 }
+-> iamenthused
 
 
 === iamenthused ===
@@ -25,9 +27,7 @@ You gesture with a swingin' thumbs up.
 
 The man smiles.
 "That's what I like to hear!" # { "sender": 2 }
-
 -> askName
-
 
 === iam ===
 
@@ -38,12 +38,12 @@ You are looking quite serious, not in the mood for much administrivia, and certa
 His tone suddenly reflects your seriousness.
 -> askName
 
-
 === askName ===
 A clipboard has appeared in the his arms out of nowhere. You wonder if he's some kind of magician?
 
 "Could I please get your name?" # { "sender": 1 }
 -> enterName
+
 === enterName
 # { "userInteraction": { "placeholder": "Your name here", "stateVar": "nameEntry", "type": "text", "handler": "nameHandler", "validator": "name" } }
     + \ I'm {name}. # { "sender": 2 }
@@ -60,42 +60,43 @@ A clipboard has appeared in the his arms out of nowhere. You wonder if he's some
 === respondName
 
 He looks through a list of guests as he mutters to himself
-"Hmm, {name}, {name}, {name}" # { "sender": 1 }
+"Hmm, {name}, {name}." # { "sender": 1 }
 
-You wonder why he's taking so long to find your name. I mean, surely it's all alphabetical. It's just after {nameLowerAlpha}!
+You wonder why he's taking so long to find your name. Surely it's ordered alphabetically. It's just after {nameLowerAlpha}!
 
-"Oh great! {name}! Here's {name}, you're {name}." # { "sender": 1 }
+"Oh! Here's {name}, you're {name}." # { "sender": 1 }
 
 He theatrically strikes off your name, then takes a second look at you.
 
-"You did read the dress code, right?"
+"You did read the dress code, right?" # { "sender": 1 }
 
-+ "Yes, it's black tie optional." # { "sender": 2 }
--> blackTieOptional
++ "Yes, it's cocktail." # { "sender": 2 }
+-> cocktail
 + "I did, black tie." # { "sender": 2 }
 -> blackTie
 + "Yeah! Space theme!" # { "sender": 2 }
 -> spaceTheme
 
-=== blackTieOptional
+=== cocktail
 ~ dress = 1
-// this is right, but missing Reaction
 
--> END
+todo: correct choice so reward player. write reaction.
+
+-> enterCeremony
 
 === blackTie
-// this is incorrect, so END
+
+todo: make fun of player for getting the choice wrong, show game end.
 
 -> END
-
 
 === spaceTheme
 ~ dress = 2
 
-You draw down the visor on your helmet which you were wearing this whole time.
+You draw down the visor on your helmet. Yes, you were wearing a helmet this whole time!
 Luckily you are a master of role-play, and decide to put on a voice like you're communicating through a space radio.
 
-"Kch, permissions to enter the wedding Houston. Over. Ksh."
+"Kch, permissions to enter the wedding Houston. Over. Ksh." # { "sender": 2 }
 
 The man is frozen with his mouth wide open and you think maybe you've made a huge mistake.
 
@@ -106,7 +107,7 @@ The man is frozen with his mouth wide open and you think maybe you've made a hug
 
 The man seems to reach something behind his neck. He flips up a set of discrete headphones onto his head and extends an earpiece. He flips the clipboard to reveal a panel of many switches and flickering buttons.
 
-"{name}, this is Houston. You are cleared to enter the wedding, over."
+"{name}, this is Houston. You are cleared to enter the wedding, over." # { "sender": 1 }
 
 You breath a sigh of relief which partly fogs up your helmet visor adding to the immersion.
 
@@ -115,50 +116,46 @@ Houston opens the door and you head inside!
 -> enterCeremony
 
 === enterCeremony
-
-
 {dress == 1: It looks black tie optional, everyone looks completely gorgeous and in their element.}
 
-{dress == 2: You can hear the faint bleeps and bloops of space technology as you enter a dark hall. It's hard to see through the thick mist on the floor but it feels like sand beneath your white gumboots (space boots). Assuming this is an alien planet, you begin to walk as if in low-gravity.}
+{dress == 2: You can hear the faint bleeps and bloops of space technology as you enter a dark hall. It's hard to see through the thick mist on the floor but it feels like sand beneath your white gumboots (space boots). You begin to walk as if in low-gravity with long slow steps and your cheeks puffed out.}
 
-
-There seems to be rows of chairs {dress == 1: draped in with floral arrangement.}{dress == 2: covered in space dust.}
-
+There seems to be rows of chairs {dress == 1: draped in with floral arrangement.} {dress == 2: covered in space dust.}
 
 // Ceremony, describe: guests, decorations
 
 You see a beautiful lawn with guests happily chatting and laughing. You walk to join them and a few heads turn excitedly toward you but then away again as they realize you're not the bride or groom.
 
 You scan the good-looking crowd and recognise some old friends. As you walk. Someone calls your name:
-"{name}! {name}!"
+"{name}! {name}!" # { "sender": 1 }
 
 Oh no, it's your cousin Karen
 + Run
     -> runFromKaren
-+ "Heyyy Karen"
++ "Heyyy Karen" # { "sender": 2 }
     -> hiKaren
 
 === runFromKaren
 You walk faster. The last time you were caught with Karen at a wedding you missed the whole thing because she wouldn't shut up about her ex-boyfriend Daren.
 
-You cut through a group.of good-looking young men, hoping Karen will get distracted like a fish in a net of other good-looking fish.
+You cut through a group of good-looking young men, hoping Karen will get distracted like a fish in a net of other good-looking fish.
 
-She's hot on your tail but stops in the net with a faux tumble into the arms of an unsuspecting guy. "Oh goodness me I'm so sorry!"
+She's hot on your tail but stops in the net with a faux tumble into the arms of an unsuspecting guy.
+"Oh goodness me I'm so sorry!" # { "sender": 1 }
 This is a classic Karen move.
-"It's these damn heels on the grass ha-ha". The man apologies and introduces the guys.
+"It's these damn heels on the grass ha-ha". # { "sender": 1 }
+The man apologies and introduces the guys.
 
 You successfully avoided Karen! 100 points.
 
 You hear quiet voice over a PA system:
-"Ladies and Gentlemen would you please be seated as the bride and groom will be arriving shortly.
+"Ladies and Gentlemen would you please be seated as the bride and groom will be arriving shortly." # { "sender": 1 }
 
 -> END
 
 === hiKaren
 
-"Heyyyy Karen" You smile.
-
-"{name}! I havent seen you in forever, you look amazing, I love your outfit, I feel like I made a mistake with these heels, haha"
+"{name}! I havent seen you in forever, you look amazing, I love your outfit but it's a bit out there huh? You're so brave! I feel like I made a mistake with these heels, haha" # { "sender": 1 }
 
 // Vows, speak now or forever hold your peace
 
