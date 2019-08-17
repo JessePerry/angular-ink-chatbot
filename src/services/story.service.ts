@@ -8,9 +8,12 @@ import { StoryPointOptions } from '../interfaces/story-point-options.interface';
 import { StoryEventType } from '../enums/story-event-type.enum';
 import { UserInteraction } from '../interfaces/user-interaction.interface';
 import { UserInteractionType } from '../enums/choice-type.enum';
+import { StoryPointCommand } from '../enums/story-point-command.enum';
 import { StoryPointSender } from '../enums/story-point-sender.enum';
 import { UserInteractionHandlerService } from './user-interaction-handler.service';
 import { UserInteractionValidatorService } from './user-interaction-validator.service';
+import { JsonPipe } from '@angular/common';
+import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 
 @Injectable()
 export class StoryService {
@@ -74,7 +77,15 @@ export class StoryService {
   private proceed() {
     if (!this.paused && this.story) {
       if (this.story.canContinue) {
-        const storyPoint = this.buildStoryPointFromMessage(this.story.Continue());
+        const storyMessage = this.story.Continue();
+        const storyPoint = this.buildStoryPointFromMessage(storyMessage);
+
+        if (storyPoint.options.cmd === StoryPointCommand.RESET) {
+          this.storyPoints = [];
+          this.choiceEntries = [];
+          this.story.ResetState();
+          this.proceed();
+        }
 
         setTimeout(() => {
           this.storyPoints.push(storyPoint);
@@ -107,9 +118,11 @@ export class StoryService {
 
   private buildStoryPointOptionsFromTag(tag: string): StoryPointOptions {
     const customOptions: StoryPointOptions = JSON.parse(tag);
-
+    if (customOptions.cmd === StoryPointCommand.RESET) {
+      return customOptions;
+    }
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 100, // 1500,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 500, // 1500,
       sender: customOptions.sender,
     }, customOptions);
   }

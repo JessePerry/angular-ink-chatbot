@@ -352,7 +352,8 @@ I have saved your RSVP information. Thanks so much for playing! # { "sender": 1 
 == start_over
 - Want to start over?
     + Sure. # { "sender": 1 }
-      -> start
+    # { "cmd": "RESET" }
+    -> start
     + Take me straight to the RSVP part. # { "sender": 2 }
     -> rsvp
     + No, thank you. # { "sender": 2 }
