@@ -33,7 +33,7 @@ export class UserInteractionHandlerService {
     });
     capitalName = capitalName.trim();
     const firstChar = this.getAppropriateEarlierAlphaLetter(capitalName.toLowerCase()[0]);
-    console.log(`${firstChar} + ${capitalName.charAt(0).toLowerCase()} + ${capitalName.slice(1)}`)
+    // console.log(`${firstChar} + ${capitalName.charAt(0).toLowerCase()} + ${capitalName.slice(1)}`)
     let nameLowerAlpha = ''
     if (firstChar === 'a') {
       nameLowerAlpha = 'A' + capitalName.charAt(0).toLowerCase() + capitalName.slice(1);
@@ -41,9 +41,21 @@ export class UserInteractionHandlerService {
       nameLowerAlpha = firstChar.toUpperCase() + capitalName.slice(1);
     }
 
-    console.log(`nameHandler name: ${value} into ${capitalName} and nameLowerAlpha ${nameLowerAlpha}`);
+    // console.log(`nameHandler name: ${value} into ${capitalName} and nameLowerAlpha ${nameLowerAlpha}`);
     this.story.variablesState.$('name', capitalName);
     this.story.variablesState.$('nameLowerAlpha', nameLowerAlpha);
+  }
+
+  private otherNamesHandler(value: string) {
+    this.story.variablesState.$('otherNames', value);
+  }
+
+  private emailOrPhoneHandler(value: string) {
+    this.story.variablesState.$('emailOrPhone', value);
+  }
+
+  private commentsHandler(value: string) {
+    this.story.variablesState.$('comments', value);
   }
 
   private getAppropriateEarlierAlphaLetter(letter: string): string {

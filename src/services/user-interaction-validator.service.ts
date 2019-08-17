@@ -27,12 +27,24 @@ export class UserInteractionValidatorService {
   }
 
   private validateName(value: any): string | null {
-    console.log(`validateName: ${value}`);
+    // console.log(`validateName: ${value}`);
     value = String(value);
     if (value === '') {
       return 'nameIsEmpty'
     } else {
       return null
     }
+  }
+
+  private validateOtherNames(value: string) {
+    return this.validateName(value);
+  }
+
+  private validateEmailOrPhone(value: string) {
+    return this.validateName(value);
+  }
+
+  private validateComments(value: string) {
+    return this.validateName(value);
   }
 }

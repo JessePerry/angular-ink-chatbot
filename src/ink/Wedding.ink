@@ -2,16 +2,21 @@ VAR name = ""
 VAR nameEntry = ""
 VAR nameLowerAlpha = ""
 VAR dress = 0 // 1 cocktail, 2 space
-VAR age = 0
-VAR birthday = "06/16/1989"
 VAR validationError = 0
 
+VAR retrying = 0
+VAR isAttending = 0
+VAR otherNamesEntry = ""
+VAR otherNames = ""
+VAR emailOrPhoneEntry = ""
+VAR emailOrPhone = ""
+VAR commentsEntry = ""
+VAR comments = ""
 -> start
-
 = start
 BIOTA, November 1st, 2019
 You get out of your car and arrive at the wedding just on time (5pm!) and follow a beautifully trimmed hedgeline up to the entrance.
-IMAGE: https://
+
 // hedge? I dunno
 
 -> entry
@@ -24,6 +29,8 @@ A smartly dressed man greets you at the front door.
 -> iam
 + "You bet I am!" # { "sender": 2 }
 -> iamenthused
++ "I want to skip to the RSVP part" # { "sender": 2 }
+-> rsvp
 
 
 === iamenthused ===
@@ -97,7 +104,7 @@ todo: make fun of player for getting the choice wrong, show game end.
 === spaceTheme
 ~ dress = 2
 
-You draw down the visor on your helmet. Yes, you were wearing a helmet this whole time!
+You draw down the visor on your helmet. You were wearing a helmet this whole time!
 Luckily you are a master of role-play, and decide to put on a voice like you're communicating through a space radio.
 
 "Kch, permissions to enter the wedding Houston. Over. Ksh." # { "sender": 2 }
@@ -178,8 +185,175 @@ todo:  Choices have cause and effect!
 
 -> start_over
 
+== rsvp
+You get a strange urge to look up at the evening sky. You admire the intense natural beauty when a deep, voice comes down from the heavens and a single light shines upon you.
+
+"Hello there, potential wedding guest." # { "sender": 1 }
+
++ "God?" # { "sender": 2 }
+-> rsvpSysAdmin
++ "Mum?" # { "sender": 2 }
+-> rsvpSysAdmin
+
+== rsvpSysAdmin
+"Ha ha, no." # { "sender": 1 }
+The voice booms.
+"I am the system administrator for this website! I just have a few questions for you regarding your attendance at Lillian and Jesses' wedding." # { "sender": 1 }
+"You will get a chance to change your answers before submitting. So don't worry!" # { "sender": 1 }
+
+-> rsvpName
+
+== rsvpName
+- {
+    - name != "": -> rsvpNameSure
+    - else: -> rsvpNameEntry
+}
+
+== rsvpNameEntry
+"What is your name?" # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Your name here", "stateVar": "nameEntry", "type": "text", "handler": "nameHandler", "validator": "name" } }
+    + \ I'm {name}. # { "sender": 2 }
+- {
+    - validationError == 0 && retrying == 0: -> rsvpAttending
+    - validationError == 0 && retrying == 1: -> rsvpCheckForm
+    - else: -> rsvpName_validation_error
+}
+-> DONE
+
+= rsvpName_validation_error
+"Sorry? I didn't quite catch that." # { "sender": 1 }
+-> rsvpNameEntry
+
+== rsvpNameSure
+"You said your name was {name}. Is that right?" # { "sender": 1 }
+
++ "Yes" # { "sender": 2 }
+-> rsvpAttending
++ "No" # { "sender": 2 }
+-> rsvpNameEntry
+
+== rsvpAttending
+"Are you able to attend the wedding on the 1st November, 2019?" # { "sender": 1 }
+
++ "Yes" # { "sender": 2 }
+-> rsvpAttendingYes
++ "No" # { "sender": 2 }
+-> rsvpAttendingNo
+
+== rsvpAttendingYes
+~ isAttending = 1
+"Wonderful, we can't wait to see you!" # { "sender": 1 }
+{ retrying == 0: -> rsvpOnBehalf}
+{ retrying == 1: -> rsvpCheckForm}
+
+== rsvpAttendingNo
+~ isAttending = 0
+"Oh, what a shame! We would have loved to see you." # { "sender": 1 }
+{ retrying == 0: -> rsvpOnBehalf}
+{ retrying == 1: -> rsvpCheckForm}
+
+== rsvpOnBehalf
+"Would you like to respond on behalf of another guest? Or they can play the game themselves." # { "sender": 1 }
+
++ "Yes" # { "sender": 2 }
+-> rsvpOnBehalfYes
++ "No" # { "sender": 2 }
+-> rsvpEmailOrPhone
+
+== rsvpOnBehalfYes
+"Who are they?" # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Their names here", "stateVar": "otherNamesEntry", "type": "text", "handler": "otherNamesHandler", "validator": "name" } }
+    + \ They are {otherNames}. # { "sender": 2 }
+- {
+    - validationError == 0 && retrying == 0: -> rsvpEmailOrPhone
+    - validationError == 0 && retrying == 1: -> rsvpCheckForm
+    - else: -> otherNames_validation_error
+}
+-> DONE
+
+= otherNames_validation_error
+"Sorry? I didn't quite catch that." # { "sender": 1 }
+-> rsvpOnBehalfYes
+
+== rsvpEmailOrPhone
+"Please give us a way to contact you with an email or phone number." # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Email or phone number here", "stateVar": "emailOrPhoneEntry", "type": "text", "handler": "emailOrPhoneHandler", "validator": "name" } }
+    + \ {emailOrPhone}. # { "sender": 2 }
+- {
+    - validationError == 0 && retrying == 0: -> rsvpComments
+    - validationError == 0 && retrying == 1: -> rsvpCheckForm
+    - else: -> emailOrPhone_validation_error
+}
+-> DONE
+
+= emailOrPhone_validation_error
+"Sorry? I didn't quite catch that." # { "sender": 1 }
+-> rsvpEmailOrPhone
+
+== rsvpComments
+"Would you like to make any other comments?" # { "sender": 1 }
++ "Yes" # { "sender": 2 }
+-> rsvpCommentsYes
++ "No" # { "sender": 2 }
+-> rsvpCheckForm
+
+== rsvpCommentsYes
+
+# { "userInteraction": { "placeholder": "Enter your comment", "stateVar": "commentsEntry", "type": "text", "handler": "commentsHandler", "validator": "name" } }
+    + \ {comments}. # { "sender": 2 }
+- {
+    - validationError == 0: -> rsvpCheckForm
+    - else: -> comments_validation_error
+}
+-> DONE
+
+= comments_validation_error
+"Sorry? I didn't quite catch that." # { "sender": 1 }
+-> rsvpCommentsYes
+
+== rsvpCheckForm
+You are: {name}
+You are {isAttending == 0: not} attending the wedding.
+- {
+  - otherNames != "": You are responding on behalf of: {otherNames}
+}
+Your Email or Phone number is: {emailOrPhone}
+- {
+  - comments != "": Your comments: {comments}
+}
+
+"Is all that correct?" # { "sender": 1 }
+
++ "Yes" # { "sender": 2 }
+  -> rsvpFinish
++ "No" # { "sender": 2 }
+  -> rsvpEdit
+
+== rsvpEdit
+~ retrying = 1
+"What would you like to edit?" # { "sender": 1 }
++ "My Name" # { "sender": 2 }
+ -> rsvpName
++ "My attendance" # { "sender": 2 }
+ -> rsvpAttending
++ "Other names" # { "sender": 2 }
+ -> rsvpOnBehalf
++ "My email or phone number" # { "sender": 2 }
+ -> rsvpEmailOrPhone
++ "My comments" # { "sender": 2 }
+ -> rsvpComments
+
+== rsvpFinish
+~ retrying = 0
+"I have saved your RSVP information. Thanks so much for playing!" # { "sender": 1 }
+
+-> start_over
+
 == start_over
 - Want to start over?
-    + Sure. -> start # { "sender": 1 }
+    + Sure. # { "sender": 1 }
+      -> start
+    + Take me straight to the RSVP part. # { "sender": 1 }
+    -> rsvp
     + No, thank you. # { "sender": 1 }
 -> END

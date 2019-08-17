@@ -19,7 +19,8 @@ export class StoryService {
   public currentUserInteraction: UserInteraction;
   public events: Subject<any>;
   public story: any;
-  public storyPoints: any[];
+  public storyPoints: StoryPoint[];
+  public choiceEntries: string[]
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
@@ -28,6 +29,7 @@ export class StoryService {
     this.events = new Subject();
     this.story = new inkjs.Story(require('../ink/Wedding.ink.json'));
     this.storyPoints = [];
+    this.choiceEntries = [];
 
     this.userInteractionHandlerService.init(this.story);
   }
@@ -55,11 +57,15 @@ export class StoryService {
       if (this.currentUserInteraction.stateVar) {
         this.story.variablesState.$(this.currentUserInteraction.stateVar, value);
       }
-
       this.story.ChooseChoiceIndex(0);
+      this.choiceEntries.push(value);
     } else {
       this.story.ChooseChoiceIndex(value.index);
+      this.choiceEntries.push(value.text);
     }
+
+    // console.log(`Story Points: ${JSON.stringify(this.storyPoints.map((p) => p.originalMessage))}`);
+    console.log(`Choice Entries: ${JSON.stringify(this.choiceEntries)}`);
 
     this.currentUserInteraction = null;
     this.proceed();
@@ -70,12 +76,12 @@ export class StoryService {
       if (this.story.canContinue) {
         const storyPoint = this.buildStoryPointFromMessage(this.story.Continue());
 
-                setTimeout(() => {
-        this.storyPoints.push(storyPoint);
-        this.events.next({
-          type: StoryEventType.STORY_POINT_ADDED,
-          data: storyPoint
-        });
+        setTimeout(() => {
+          this.storyPoints.push(storyPoint);
+          this.events.next({
+            type: StoryEventType.STORY_POINT_ADDED,
+            data: storyPoint
+          });
 
           this.proceed();
         }, storyPoint.options.delay);
