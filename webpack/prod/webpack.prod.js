@@ -51,7 +51,8 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico|wav|mp3)$/,
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        include: /assets\/images/,
         loader: 'file-loader?name=[path][name].[ext]&context=src'
       },
       {
