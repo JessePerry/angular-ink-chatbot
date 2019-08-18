@@ -46,7 +46,7 @@ export class MessagePanelComponent implements OnInit {
     animejs({
       targets: this.avatar,
       width: [200, 100],
-      duration: 3000,
+      duration: 2000,
       elasticity: 0,
     });
   }
@@ -55,7 +55,7 @@ export class MessagePanelComponent implements OnInit {
     await animejs({
       targets: this.avatar,
       width: [100, 200],
-      duration: 3000,
+      duration: 2000,
       elasticity: 0
     }).finished;
     this.scrolled = false;

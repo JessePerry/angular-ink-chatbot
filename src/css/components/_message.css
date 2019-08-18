@@ -26,4 +26,10 @@
   padding: var(--ff-spacing-m) var(--ff-spacing-l);
   border-radius: var(--ff-small-border-radius);
   transform-origin: left;
+
+  & > img {
+    color: var(--ff-text-light);
+    width: 75%;
+    transform-origin: center;
+  }
 }

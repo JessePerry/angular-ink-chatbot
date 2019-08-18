@@ -6,6 +6,7 @@ let SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 let environment = require('./environment.prod');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -50,7 +51,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico|wav|mp3)$/,
         loader: 'file-loader?name=[path][name].[ext]&context=src'
       },
       {
@@ -103,6 +104,8 @@ module.exports = {
     new UglifyJsPlugin(),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(environment)
-    })
-  ]
-};
+    }),
+    new CopyWebpackPlugin([
+      {from:'./src/assets/sounds',to:'assets/sounds'}
+    ]),
+]};

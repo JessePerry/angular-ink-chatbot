@@ -115,7 +115,8 @@ Kch, permissions to enter the wedding Houston. Over. Ksh. # { "sender": 2 }
 
 The man is frozen with his mouth wide open and you think maybe you've made a huge mistake.
 
-+  Wait..
++  [Wait]
+You wait a second.
 -> spaceReaction
 
 === spaceReaction

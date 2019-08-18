@@ -12,8 +12,7 @@ import { StoryPointCommand } from '../enums/story-point-command.enum';
 import { StoryPointSender } from '../enums/story-point-sender.enum';
 import { UserInteractionHandlerService } from './user-interaction-handler.service';
 import { UserInteractionValidatorService } from './user-interaction-validator.service';
-import { JsonPipe } from '@angular/common';
-import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
+import { Howl, Howler } from 'howler';
 
 @Injectable()
 export class StoryService {
@@ -23,7 +22,10 @@ export class StoryService {
   public events: Subject<any>;
   public story: any;
   public storyPoints: StoryPoint[];
-  public choiceEntries: string[]
+  public choiceEntries: string[];
+  private userInteractSound: Howl;
+  private dialogSound: Howl;
+  private swooshSound: Howl;
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
@@ -35,6 +37,13 @@ export class StoryService {
     this.choiceEntries = [];
 
     this.userInteractionHandlerService.init(this.story);
+
+    this.userInteractSound = new Howl({ src: ['./assets/sounds/button-4.mp3'], volume: 0.7 }); // https://danielstern.github.io/ngAudio/#/
+    this.dialogSound = new Howl({ src: ['./assets/sounds/button-1.mp3'], volume: 0.3 });
+    this.swooshSound = new Howl({ src: ['./assets/sounds/swoosh.mp3'], volume: 0.3 }); // http://soundbible.com/670-Swooshing.html
+    // http://soundbible.com/2163-Party-Crowd.html
+
+    Howler.volume(1);
   }
 
   public start() {
@@ -95,6 +104,13 @@ export class StoryService {
           this.proceed();
         } else {
           setTimeout(() => {
+            if (storyPoint.options.sender === StoryPointSender.DIALOG) {
+              this.dialogSound.play();
+            } else if (storyPoint.options.sender === StoryPointSender.USER) {
+              this.userInteractSound.play();
+            } else {
+              this.swooshSound.play();
+            }
             this.storyPoints.push(storyPoint);
             this.events.next({
               type: StoryEventType.STORY_POINT_ADDED,

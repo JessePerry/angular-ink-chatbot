@@ -2,6 +2,7 @@ let path = require('path');
 let webpack = require('webpack');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let environment = require('./environment.dev');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -136,6 +137,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(environment)
-    })
+    }),
+    new CopyWebpackPlugin([
+      {from:'./src/assets/sounds',to:'assets/sounds'}
+  ]),
   ]
 };
