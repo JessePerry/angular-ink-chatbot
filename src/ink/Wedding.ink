@@ -15,13 +15,19 @@ VAR comments = ""
 -> start
 = start
 BIOTA, November 1st, 2019
-You get out of your car and arrive at the wedding just on time. You follow a beautifully trimmed hedgeline up to the entrance.
+It is an amazing spring afternoon in the Sydney hinterland. You've finished driving and as far as car parks go, this one's pretty nice.
+The clock on the dashboard reads 4:30PM, just in time!
+You leave the car as you fix yourself up and look for where to go.
+There is a beautifully trimmed hedgeline which you follow up to the entrance.
 
++ [Go to entrance]
+You head to the entrance
 -> entry
 
 === entry ===
 A smartly dressed man greets you at the front door.
-Good afternoon! Are you here for the wedding of Jesse and Lillian? # { "sender": 1 }
+<img src="assets/images/dom-212x381.png">
+<strong>Good afternoon!</strong> Are you here for the wedding of Jesse and Lillian? # { "sender": 1 }
 
 + I am. # { "sender": 2 }
 -> iam
