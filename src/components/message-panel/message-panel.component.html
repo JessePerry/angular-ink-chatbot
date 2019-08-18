@@ -1,8 +1,8 @@
-<section class="message-panel">
-  <aside class="message-panel__avatar">
+<section class="message-panel" #myFlexBox>
+  <aside class="message-panel__avatar" #avatar>
     <img src="../../assets/images/weddinggame-600.png" alt="">
   </aside>
-  <div class="message-panel__messages" botChatScroll>
+  <div class="message-panel__messages" botChatScroll (scroll)="onScroll($event)" >
     <bot-message *ngFor="let storyPoint of storyPoints" [storyPoint]="storyPoint"></bot-message>
   </div>
   <div class="message-panel__action-bar">

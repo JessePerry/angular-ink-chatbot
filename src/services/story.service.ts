@@ -69,7 +69,10 @@ export class StoryService {
 
     // console.log(`Story Points: ${JSON.stringify(this.storyPoints.map((p) => p.originalMessage))}`);
     console.log(`Choice Entries: ${JSON.stringify(this.choiceEntries)}`);
-
+    this.events.next({
+      type: StoryEventType.USER_INTERACTION_FINISHED,
+      data: this.currentUserInteraction
+    });
     this.currentUserInteraction = null;
     this.proceed();
   }
@@ -78,24 +81,28 @@ export class StoryService {
     if (!this.paused && this.story) {
       if (this.story.canContinue) {
         const storyMessage = this.story.Continue();
+        console.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
         if (storyPoint.options.cmd === StoryPointCommand.RESET) {
+          this.events.next({
+            type: StoryEventType.RESET
+          });
+          this.story.ResetState();
           this.storyPoints = [];
           this.choiceEntries = [];
-          this.story.ResetState();
+          this.paused = false;
           this.proceed();
+        } else {
+          setTimeout(() => {
+            this.storyPoints.push(storyPoint);
+            this.events.next({
+              type: StoryEventType.STORY_POINT_ADDED,
+              data: storyPoint
+            });
+            this.proceed();
+          }, storyPoint.options.delay);
         }
-
-        setTimeout(() => {
-          this.storyPoints.push(storyPoint);
-          this.events.next({
-            type: StoryEventType.STORY_POINT_ADDED,
-            data: storyPoint
-          });
-
-          this.proceed();
-        }, storyPoint.options.delay);
       } else if (this.story.currentChoices.length > 0) {
         this.currentUserInteraction = this.buildUserInteractionFromChoices(this.story.currentChoices);
         this.events.next({
