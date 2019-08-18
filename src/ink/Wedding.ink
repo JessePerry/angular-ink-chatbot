@@ -14,7 +14,7 @@ VAR commentsEntry = ""
 VAR comments = ""
 -> start
 = start
-BIOTA, November 1st, 2019
+<strong>BIOTA, November 1st, 2019</strong>
 It is an amazing spring afternoon in the Sydney hinterland. You've finished driving and as far as car parks go, this one's pretty nice.
 The clock on the dashboard reads 4:30PM, just in time!
 You leave the car as you fix yourself up and look for where to go.
@@ -190,6 +190,14 @@ todo:  Choices have cause and effect!
 
 -> start_over
 
+
+
+
+
+
+
+
+// RSVP PART HERE:
 == rsvp
 You get a strange urge to look up at the evening sky. You admire the intense natural beauty when a deep voice comes down from the heavens and a single light shines upon you.
 
