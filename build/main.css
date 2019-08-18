@@ -672,8 +672,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.quot {
-  font-style: italic;
+strong {
   font-weight: 600;
 }
 

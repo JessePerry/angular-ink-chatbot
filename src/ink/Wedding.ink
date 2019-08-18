@@ -15,9 +15,7 @@ VAR comments = ""
 -> start
 = start
 BIOTA, November 1st, 2019
-You get out of your car and arrive at the wedding just on time (5pm!) and follow a beautifully trimmed hedgeline up to the entrance.
-
-// hedge? I dunno
+You get out of your car and arrive at the wedding just on time. You follow a beautifully trimmed hedgeline up to the entrance.
 
 -> entry
 

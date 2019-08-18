@@ -2,12 +2,13 @@
   display: flex;
   width: 100%;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .action-bar__item {
   margin-right: var(--ff-spacing-l);
+  margin-bottom: var(--ff-spacing-l);
   flex-basis: auto;
-
   &:last-child {
     margin-right: 0;
   }
