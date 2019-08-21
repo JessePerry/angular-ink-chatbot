@@ -47,15 +47,17 @@ export class UserInteractionHandlerService {
   }
 
   private otherNamesHandler(value: string) {
-    this.story.variablesState.$('otherNames', value);
+    this.story.variablesState.$('otherNames', `"${value}"`);
   }
 
   private emailOrPhoneHandler(value: string) {
-    this.story.variablesState.$('emailOrPhone', value);
+    // The renderer seems to drop leading '0' chars treating them as whitespace
+    // so for free-text entry, we surround in quotes as a workaround.
+    this.story.variablesState.$('emailOrPhone', `"${value}"`);
   }
 
   private commentsHandler(value: string) {
-    this.story.variablesState.$('comments', value);
+    this.story.variablesState.$('comments', `"${value}"`);
   }
 
   private getAppropriateEarlierAlphaLetter(letter: string): string {

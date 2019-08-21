@@ -8,8 +8,8 @@ VAR retrying = 0
 VAR isAttending = 0
 VAR otherNamesEntry = ""
 VAR otherNames = ""
-VAR emailOrPhoneEntry = ""
-VAR emailOrPhone = ""
+VAR emailOrPhoneEntry = "0123"
+VAR emailOrPhone = "0123"
 VAR commentsEntry = ""
 VAR comments = ""
 -> start
@@ -22,7 +22,7 @@ There is a beautifully trimmed hedgeline which you follow up to the entrance.
 
 + [Go to entrance]
 You head to the entrance
--> entry
+-> rsvpEdit
 
 === entry ===
 A smartly dressed man greets you at the front door.
@@ -290,7 +290,7 @@ Sorry? I didn't quite catch that. # { "sender": 1 }
 
 == rsvpEmailOrPhone
 Please give us a way to contact you with an email or phone number. # { "sender": 1 }
-# { "userInteraction": { "placeholder": "Email or phone number here", "stateVar": "emailOrPhoneEntry", "type": "text", "handler": "emailOrPhoneHandler", "validator": "name" } }
+# { "userInteraction": { "placeholder": "Email or phone number here", "stateVar": "emailOrPhoneEntry", "type": "text", "handler": "emailOrPhoneHandler", "validator": "emailOrPhone" } }
     + \ {emailOrPhone}. # { "sender": 2 }
 - {
     - validationError == 0 && retrying == 0: -> rsvpComments
