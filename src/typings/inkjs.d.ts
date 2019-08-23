@@ -6,5 +6,6 @@ declare module 'inkjs' {
   export interface Choice {
     index: number;
     text: string;
+    isTextEntry: boolean;
   }
 }

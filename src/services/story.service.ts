@@ -16,16 +16,16 @@ import { Howl, Howler } from 'howler';
 
 @Injectable()
 export class StoryService {
-  private paused = false;
-
   public currentUserInteraction: UserInteraction;
   public events: Subject<any>;
   public story: any;
   public storyPoints: StoryPoint[];
-  public choiceEntries: string[];
+  public choiceEntries: Choice[];
   private userInteractSound: Howl;
   private dialogSound: Howl;
   private swooshSound: Howl;
+  private isAutoChoose: boolean;
+  private replayChoiceIndex: number;
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
@@ -47,37 +47,43 @@ export class StoryService {
   }
 
   public start() {
-    this.paused = false;
     this.proceed();
   }
 
-  public pause() {
-    this.paused = true;
+
+  public back() {
+    this.choiceEntries.pop();
+    this.replayChoiceIndex = 0;
+    // Reset, then proceed with isAutoChoose on.
+    this.events.next({
+      type: StoryEventType.RESET
+    });
+    this.story.ResetState();
+    this.storyPoints = [];
+    this.isAutoChoose = true;
+    this.proceed();
+  }
+
+  public reset() {
+    this.currentUserInteraction = {};
+    this.events.next({
+      type: StoryEventType.RESET
+    });
+    this.story.ResetState();
+    this.storyPoints = [];
+    this.choiceEntries = [];
+    this.proceed();
   }
 
   public triggerUserInteraction(value: Choice | string) {
     if (typeof value === 'string') {
-      if (this.currentUserInteraction.validator) {
-        const validationError = this.userInteractionValidatorService.validate(this.currentUserInteraction.validator, value);
-        this.story.variablesState.$('validationError', validationError || '');
-      }
-
-      if (this.currentUserInteraction.handler) {
-        this.userInteractionHandlerService.handle(this.currentUserInteraction.handler, value);
-      }
-
-      if (this.currentUserInteraction.stateVar) {
-        this.story.variablesState.$(this.currentUserInteraction.stateVar, value);
-      }
+      this.validateAndSetStateForStringChoice(value);
       this.story.ChooseChoiceIndex(0);
-      this.choiceEntries.push(value);
+      this.choiceEntries.push({ index: 0, text: value, isTextEntry: true });
     } else {
       this.story.ChooseChoiceIndex(value.index);
-      this.choiceEntries.push(value.text);
+      this.choiceEntries.push(value);
     }
-
-    // console.log(`Story Points: ${JSON.stringify(this.storyPoints.map((p) => p.originalMessage))}`);
-    console.log(`Choice Entries: ${JSON.stringify(this.choiceEntries)}`);
     this.events.next({
       type: StoryEventType.USER_INTERACTION_FINISHED,
       data: this.currentUserInteraction
@@ -87,29 +93,31 @@ export class StoryService {
   }
 
   private proceed() {
-    if (!this.paused && this.story) {
+    if (this.story) {
       if (this.story.canContinue) {
         const storyMessage = this.story.Continue();
         console.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
-        if (storyPoint.options.cmd === StoryPointCommand.RESET) {
+        if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
           this.events.next({
-            type: StoryEventType.RESET
+            type: StoryEventType.BACK_UNLOCK
           });
-          this.story.ResetState();
-          this.storyPoints = [];
-          this.choiceEntries = [];
-          this.paused = false;
-          this.proceed();
+        }
+
+        if (storyPoint.options.cmd === StoryPointCommand.RESET) {
+          this.reset();
         } else {
+          const delay = this.isAutoChoose ? 0 : storyPoint.options.delay;
           setTimeout(() => {
-            if (storyPoint.options.sender === StoryPointSender.DIALOG) {
-              this.dialogSound.play();
-            } else if (storyPoint.options.sender === StoryPointSender.USER) {
-              this.userInteractSound.play();
-            } else {
-              this.swooshSound.play();
+            if (!this.isAutoChoose) {
+              if (storyPoint.options.sender === StoryPointSender.DIALOG) {
+                this.dialogSound.play();
+              } else if (storyPoint.options.sender === StoryPointSender.USER) {
+                this.userInteractSound.play();
+              } else {
+                this.swooshSound.play();
+              }
             }
             this.storyPoints.push(storyPoint);
             this.events.next({
@@ -117,15 +125,40 @@ export class StoryService {
               data: storyPoint
             });
             this.proceed();
-          }, storyPoint.options.delay);
+          }, delay);
         }
       } else if (this.story.currentChoices.length > 0) {
         this.currentUserInteraction = this.buildUserInteractionFromChoices(this.story.currentChoices);
-        this.events.next({
-          type: StoryEventType.USER_INTERACTION_STARTED,
-          data: this.currentUserInteraction
-        });
+        if (this.replayChoiceIndex > this.choiceEntries.length - 1) {
+          this.isAutoChoose = false;
+        }
+        if (this.isAutoChoose) {
+          const choicePreviouslyMade = this.choiceEntries[this.replayChoiceIndex];
+          this.replayChoiceIndex++;
+          if (choicePreviouslyMade.isTextEntry) { this.validateAndSetStateForStringChoice(choicePreviouslyMade.text); }
+          this.story.ChooseChoiceIndex(choicePreviouslyMade.index);
+          this.currentUserInteraction = {};
+          this.proceed();
+        } else {
+          this.events.next({
+            type: StoryEventType.USER_INTERACTION_STARTED,
+            data: this.currentUserInteraction
+          });
+        }
       }
+    }
+  }
+
+  private validateAndSetStateForStringChoice(value: string) {
+    if (this.currentUserInteraction.validator) {
+      const validationError = this.userInteractionValidatorService.validate(this.currentUserInteraction.validator, value);
+      this.story.variablesState.$('validationError', validationError || '');
+    }
+    if (this.currentUserInteraction.handler) {
+      this.userInteractionHandlerService.handle(this.currentUserInteraction.handler, value);
+    }
+    if (this.currentUserInteraction.stateVar) {
+      this.story.variablesState.$(this.currentUserInteraction.stateVar, value);
     }
   }
 
@@ -156,7 +189,8 @@ export class StoryService {
     choices = choices.map(c => {
       return {
         index: c.index,
-        text: c.text
+        text: c.text,
+        isTextEntry: c.isTextEntry
       };
     });
 

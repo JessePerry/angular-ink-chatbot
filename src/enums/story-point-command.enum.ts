@@ -2,4 +2,5 @@ export enum StoryPointCommand {
   RESET = 'RESET',
   SUBMIT_RSVP = 'SUBMIT_RSVP',
   START_SEND_CHOICES = 'START_SEND_CHOICES',
+  BACK_UNLOCK = 'BACK_UNLOCK',
 }

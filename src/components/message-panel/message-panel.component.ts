@@ -12,16 +12,27 @@ import { StoryEventType } from '../../enums/story-event-type.enum';
 export class MessagePanelComponent implements OnInit {
   @ViewChild('avatar') private avatarElementRef: ElementRef;
   private scrolled = false;
+  private showBackButton = false;
 
   constructor(private storyService: StoryService) {
     this.storyService.events.subscribe(x => {
       if (x.type === StoryEventType.RESET) {
         this.animateAvatarBig();
+      } else if (x.type === StoryEventType.BACK_UNLOCK) {
+        this.showBackButton = true;
       }
     })
   }
 
   public ngOnInit() { }
+
+  public storyBack() {
+    this.storyService.back();
+  }
+
+  public storyReset() {
+    this.storyService.reset();
+  }
 
   public onScroll(event: any) {
     if (!this.scrolled) {

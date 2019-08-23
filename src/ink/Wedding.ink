@@ -367,10 +367,18 @@ I have saved your RSVP information. Thanks so much for playing! # { "sender": 1 
 
 == start_over
 - Want to start over?
-    + Sure. # { "sender": 1 }
-    # { "cmd": "RESET" }
-    -> start
+    + [Sure.]
+    -> backUnlockThenStart
     + Take me straight to the RSVP part. # { "sender": 2 }
     -> rsvp
     + No, thank you. # { "sender": 2 }
 -> END
+
+== backUnlockThenStart
+
+Something feels a bit different, like an option has been unlocked to "Go Back"? How perculiar.
+# {"cmd": "BACK_UNLOCK"}
+
+  + Cool!
+    # { "cmd": "RESET" }
+    -> start

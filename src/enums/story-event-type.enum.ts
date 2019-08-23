@@ -3,4 +3,5 @@ export enum StoryEventType {
   USER_INTERACTION_STARTED = 1,
   USER_INTERACTION_FINISHED = 2,
   RESET = 3,
+  BACK_UNLOCK = 4,
 }
