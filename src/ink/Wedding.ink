@@ -14,15 +14,19 @@ VAR commentsEntry = ""
 VAR comments = ""
 -> start
 = start
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
++ [Where am I?]
+-> startForReal
+== startForReal
 <strong>BIOTA, 1st November, 2019</strong>
 It is an amazing spring afternoon in the southern highlands of New South Wales. You've finished driving and as far as car parks go, this one's pretty nice.
 The clock on the dashboard reads 4:30PM, just in time!
 You leave the car as you fix yourself up and look for where to go.
 There is a beautifully trimmed hedgeline which you follow up to the entrance.
 
-+ [Go to entrance]
++ [Walk to entrance]
 You head to the entrance
--> rsvpEdit
+-> entry
 
 === entry ===
 A smartly dressed man greets you at the front door.

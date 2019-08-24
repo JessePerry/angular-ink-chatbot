@@ -1,24 +1,25 @@
 <section class="message-panel" #myFlexBox>
-  <div class="row">
+  <div class="row header">
     <div class="column">
-      <button [hidden]="!showBackButton" (click)="storyBack()" class="message-panel__btn">
-        Back
+      <button [hidden]="!showBackButton" (click)="storyBack()" class="message-panel__btn leftalign">
+        <fa-icon [icon]="faUndo"></fa-icon>
       </button>
     </div>
     <div class="column">
-      <aside class="message-panel__avatar" #avatar>
-        <img src="/assets/images/weddinggame-600.png" alt="">
+      <aside class="vcenter" >
+        <img src="/assets/images/weddinggame-600.png" #avatar class="center_image" alt="">
       </aside>
     </div>
-    <div class="column"></div>
+    <div class="column">
+      <button (click)="toggleMute()" class="message-panel__btn rightalign">
+        <fa-icon [icon]="faVolumeOffOrUp"></fa-icon>
+      </button>
+    </div>
   </div>
-  <!-- <button  (click)="storyReset()" class="message-panel__btn">
-        Reset
-    </button> -->
   <div class="message-panel__messages" botChatScroll (scroll)="onScroll($event)">
     <bot-message *ngFor="let storyPoint of storyPoints" [storyPoint]="storyPoint"></bot-message>
   </div>
-  <div class="message-panel__action-bar">
+  <div class="message-panel__action-bar footer vcenter">
     <bot-action-bar [userInteraction]="currentUserInteraction"></bot-action-bar>
   </div>
 </section>

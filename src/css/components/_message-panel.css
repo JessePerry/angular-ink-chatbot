@@ -1,26 +1,43 @@
 .message-panel {
-    display: flex;
-    max-height: 100vh;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  position: fixed;
+  top: 0;
+  width: 100%;
+  max-width: 700px;
+  padding-bottom: 10px;
 }
 
-.message-panel__avatar {
-    width: 200px;
-    margin-right: auto;
-    margin-bottom: 10px;
-    margin-left: auto;
+.header,
+.footer {
+    height: 100px;
+}
 
-    & > img {
-        width: 100%;
-    }
+.content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.center_image {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+
+}
+
+.vcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .message-panel__messages {
+    height: 100%;
     overflow-y: auto;
     margin-bottom: 20px;
-    flex-grow: 1;
+    /* flex-grow: 1; */
 
     & .message {
         margin-bottom: var(--ff-spacing-l);
@@ -43,15 +60,23 @@
     background-color: RoyalBlue;
 }
 
+.rightalign {
+    float: right;
+}
+
+.leftalign {
+    float: left;
+}
+
 .column {
-  float: left;
-  width: 33.33%;
-  padding: 10px;
+    float: left;
+    width: 33.33%;
+    padding: 10px;
 }
 
 /* Clear floats after the columns */
 .row:after {
-  content: "";
-  display: table;
-  clear: both;
+    content: "";
+    display: table;
+    clear: both;
 }

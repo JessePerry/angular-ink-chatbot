@@ -5,12 +5,14 @@ import { MessageComponent } from './message/message.component';
 import { ActionBarComponent } from './action-bar/action-bar.component';
 import { FormsModule } from '@angular/forms';
 import { DirectivesModule } from '../directives/directives.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   imports: [
     CommonModule,
     DirectivesModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule,
   ],
   declarations: [
     ActionBarComponent,

@@ -92,6 +92,12 @@ export class StoryService {
     this.proceed();
   }
 
+  public toggleIsMuted(): boolean {
+    const newVolume = Howler.volume() === 1 ? 0 : 1;
+    Howler.volume(newVolume);
+    return newVolume !== 1;
+  }
+
   private proceed() {
     if (this.story) {
       if (this.story.canContinue) {
@@ -178,7 +184,7 @@ export class StoryService {
       return customOptions;
     }
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 500, // 1500,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 1000, // 1500,
       sender: customOptions.sender,
     }, customOptions);
   }
