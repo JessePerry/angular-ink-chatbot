@@ -531,8 +531,7 @@ template {
 .container {
   max-width: 700px;
   margin: 0 auto;
-  padding-right: 16px;
-  padding-left: 16px;
+
 }
 
 .message {
@@ -581,43 +580,104 @@ template {
 }
 
 .message-panel {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  max-height: 100vh;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 700px;
+    padding-bottom: 10px;
 }
 
-.message-panel__avatar {
-  width: 200px;
-  margin-right: auto;
-  margin-bottom: 10px;
-  margin-left: auto
+.header {
+  height: 200px;
 }
 
-.message-panel__avatar > img {
-  width: 100%;
+.footer {
+}
+
+.content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.rightalign {
+  float: right;
+}
+
+.leftalign {
+  float: left;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
+  height: 100%;
+}
+
+/* Clear floats after the columns */
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+  -o-object-fit: scale-down;
+     object-fit: scale-down;
+}
+
+.vcenter {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    height: 100%;
+}
+
+.center_image {
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%; /* For an image height to take it's parent, every parent el has to have height 100%*/
 }
 
 .message-panel__messages {
-  overflow-y: auto;
-  margin-bottom: 20px;
-  -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1
+    height: 100%;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding: 15px
+
+    /* flex-grow: 1; */
 }
 
 .message-panel__messages .message {
   margin-bottom: 16px;
 }
 
-.message-panel__action-bar {
+.message-panel__action-bar {}
 
+.message-panel__btn {
+    background-color: #6C93AE; /* Blue background */
+    border: none;
+    border-radius: 4px;
+    color: white; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+}
+
+.message-panel__btn:hover {
+    background-color: RoyalBlue;
 }
 
 input,

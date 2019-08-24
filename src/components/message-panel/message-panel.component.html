@@ -1,5 +1,5 @@
 <section class="message-panel" #myFlexBox>
-  <div class="row header">
+  <div class="row header" #header>
     <div class="column">
       <button [hidden]="!showBackButton" (click)="storyBack()" class="message-panel__btn leftalign">
         <fa-icon [icon]="faUndo"></fa-icon>
@@ -19,7 +19,7 @@
   <div class="message-panel__messages" botChatScroll (scroll)="onScroll($event)">
     <bot-message *ngFor="let storyPoint of storyPoints" [storyPoint]="storyPoint"></bot-message>
   </div>
-  <div class="message-panel__action-bar footer vcenter">
+  <div class="message-panel__action-bar footer">
     <bot-action-bar [userInteraction]="currentUserInteraction"></bot-action-bar>
   </div>
 </section>

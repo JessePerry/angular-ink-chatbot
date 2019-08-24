@@ -12,12 +12,11 @@ VAR emailOrPhoneEntry = "0123"
 VAR emailOrPhone = "0123"
 VAR commentsEntry = ""
 VAR comments = ""
+// -> start
+// = start
+// + [Start]
 -> start
-= start
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
-+ [Where am I?]
--> startForReal
-== startForReal
+== start
 <strong>BIOTA, 1st November, 2019</strong>
 It is an amazing spring afternoon in the southern highlands of New South Wales. You've finished driving and as far as car parks go, this one's pretty nice.
 The clock on the dashboard reads 4:30PM, just in time!
@@ -383,6 +382,6 @@ I have saved your RSVP information. Thanks so much for playing! # { "sender": 1 
 Something feels a bit different, like an option has been unlocked to "Go Back"? How perculiar.
 # {"cmd": "BACK_UNLOCK"}
 
-  + Cool!
+  + Cool! Now Restart.
     # { "cmd": "RESET" }
     -> start

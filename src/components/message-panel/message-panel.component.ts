@@ -13,9 +13,10 @@ import { faUndo, IconDefinition, faVolumeUp, faVolumeOff } from '@fortawesome/fr
 export class MessagePanelComponent implements OnInit {
   faUndo: IconDefinition = faUndo
   faVolumeOffOrUp: IconDefinition = faVolumeUp
+  showBackButton = false;
   @ViewChild('avatar') private avatarElementRef: ElementRef;
+  @ViewChild('header') private headerElementRef: ElementRef;
   private scrolled = false;
-  private showBackButton = false;
   constructor(private storyService: StoryService) {
     this.storyService.events.subscribe(x => {
       if (x.type === StoryEventType.RESET) {
@@ -65,21 +66,33 @@ export class MessagePanelComponent implements OnInit {
   }
 
   private animateAvatarSmall() {
+    // animejs({
+    //   targets: this.avatar,
+    //   width: ['100%', '40%'],
+    //   duration: 500,
+    //   easing: 'easeOutSine'
+    // });
     animejs({
-      targets: this.avatar,
-      width: ['100%', '40%'],
+      targets: this.headerElementRef.nativeElement,
+      height: ['200px', '100px'],
       duration: 500,
       easing: 'easeOutSine'
     });
   }
 
   private async animateAvatarBig() {
-    await animejs({
-      targets: this.avatar,
-      width: ['40%', '100%'],
+    animejs({
+      targets: this.headerElementRef.nativeElement,
+      height: ['100px', '200px'],
       duration: 500,
       easing: 'easeOutSine'
-    }).finished;
+    });
+    // await animejs({
+    //   targets: this.avatar,
+    //   width: ['40%', '100%'],
+    //   duration: 500,
+    //   easing: 'easeOutSine'
+    // }).finished;
     this.scrolled = false;
   }
 }
