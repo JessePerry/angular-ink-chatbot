@@ -14,6 +14,7 @@ export class MessagePanelComponent implements OnInit {
   faUndo: IconDefinition = faUndo
   faVolumeOffOrUp: IconDefinition = faVolumeUp
   showBackButton = false;
+  titleSrc = './assets/images/weddinggame-600.png';
   @ViewChild('avatar') private avatarElementRef: ElementRef;
   @ViewChild('header') private headerElementRef: ElementRef;
   private scrolled = false;
