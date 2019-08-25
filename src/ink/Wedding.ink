@@ -18,10 +18,8 @@ VAR comments = ""
 -> start
 == start
 <strong>BIOTA, 1st November, 2019</strong>
-It is an amazing spring afternoon in the southern highlands of New South Wales. You've finished driving and as far as car parks go, this one's pretty nice.
-The clock on the dashboard reads 4:30PM, just in time!
-You leave the car as you fix yourself up and look for where to go.
-There is a beautifully trimmed hedgeline which you follow up to the entrance.
+It is an amazing spring afternoon in the southern highlands of New South Wales. The drive was easier than you expected.
+The clock on the dashboard reads 4:30PM, just in time! You leave the car as you fix yourself up and look for where to go. There is a beautifully trimmed hedgeline which follows a path.
 
 + [Walk to entrance]
 You head to the entrance
@@ -63,7 +61,7 @@ Could I please get your name? # { "sender": 1 }
 -> enterName
 
 === enterName
-# { "userInteraction": { "placeholder": "Your name here", "stateVar": "nameEntry", "type": "text", "handler": "nameHandler", "validator": "name" } }
+# { "userInteraction": { "placeholder": "Enter your name...", "stateVar": "nameEntry", "type": "text", "handler": "nameHandler", "validator": "name" } }
     + \ I'm {name}. # { "sender": 2 }
 - {
     - validationError == 0: -> respondName
@@ -77,10 +75,8 @@ Sorry? I didn't quite catch that. # { "sender": 1 }
 
 === respondName
 # { "cmd": "START_SEND_CHOICES" }
-He looks through a list of guests as he mutters to himself
 Hmm, {name}, {name}. # { "sender": 1 }
-
-You wonder why he's taking so long to find your name. Surely it's ordered alphabetically. It's just after {nameLowerAlpha}!
+He looks through a list of guests as he mutters to himself. You wonder why he's taking so long to find your name. Surely it's ordered alphabetically. It's just after {nameLowerAlpha}!
 
 Oh! Here's {name}, you're {name}. # { "sender": 1 }
 

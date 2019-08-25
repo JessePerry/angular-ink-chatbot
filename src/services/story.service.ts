@@ -122,7 +122,7 @@ export class StoryService {
               } else if (storyPoint.options.sender === StoryPointSender.USER) {
                 this.userInteractSound.play();
               } else {
-                this.swooshSound.play();
+                // this.swooshSound.play();
               }
             }
             this.storyPoints.push(storyPoint);
