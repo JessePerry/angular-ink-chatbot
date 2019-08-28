@@ -1,10 +1,11 @@
 import * as inkjs from 'inkjs';
-
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Choice } from 'inkjs';
 import { StoryPoint } from '../interfaces/story-point.interface';
 import { StoryPointOptions } from '../interfaces/story-point-options.interface';
+import { RsvpStatus } from '../interfaces/rsvp-status.interface';
 import { StoryEventType } from '../enums/story-event-type.enum';
 import { UserInteraction } from '../interfaces/user-interaction.interface';
 import { UserInteractionType } from '../enums/choice-type.enum';
@@ -13,6 +14,7 @@ import { StoryPointSender } from '../enums/story-point-sender.enum';
 import { UserInteractionHandlerService } from './user-interaction-handler.service';
 import { UserInteractionValidatorService } from './user-interaction-validator.service';
 import { Howl, Howler } from 'howler';
+const uuidv4 = require('uuid/v4');
 
 @Injectable()
 export class StoryService {
@@ -26,11 +28,14 @@ export class StoryService {
   private swooshSound: Howl;
   private isAutoChoose: boolean;
   private replayChoiceIndex: number;
+  private rsvpApiUrl: string;
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
-    private userInteractionValidatorService: UserInteractionValidatorService
+    private userInteractionValidatorService: UserInteractionValidatorService,
+    private http: HttpClient
   ) {
+    this.rsvpApiUrl = 'https://redacted/';
     this.events = new Subject();
     this.story = new inkjs.Story(require('../ink/Wedding.ink.json'));
     this.storyPoints = [];
@@ -105,6 +110,7 @@ export class StoryService {
         console.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
+
         if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
           this.events.next({
             type: StoryEventType.BACK_UNLOCK
@@ -155,6 +161,15 @@ export class StoryService {
     }
   }
 
+  sendRSVPStatus() {
+    const rsvpstatus: RsvpStatus = { Name: 'TestName', Status: 'SomethingHappened', Id: uuidv4() };
+    // this.http.get(this.rsvpApiUrl + 'rsvp').subscribe((data: any) => console.log(JSON.stringify(data)));
+    // this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus).subscribe((data: any) => console.log(JSON.stringify(data)));
+    const slackurl = 'https://hooks.slack.com/services/redacted';
+     this.http.post(slackurl, `{"text": ${JSON.stringify(JSON.stringify(rsvpstatus))}}`).subscribe((data: any) => console.log(JSON.stringify(data)));
+
+  }
+
   private validateAndSetStateForStringChoice(value: string) {
     if (this.currentUserInteraction.validator) {
       const validationError = this.userInteractionValidatorService.validate(this.currentUserInteraction.validator, value);
@@ -163,8 +178,11 @@ export class StoryService {
     if (this.currentUserInteraction.handler) {
       this.userInteractionHandlerService.handle(this.currentUserInteraction.handler, value);
     }
+
     if (this.currentUserInteraction.stateVar) {
       this.story.variablesState.$(this.currentUserInteraction.stateVar, value);
+      console.log('this.story.variablesState ' + this.story.variablesState);
+      this.sendRSVPStatus();
     }
   }
 
@@ -184,7 +202,7 @@ export class StoryService {
       return customOptions;
     }
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 1000, // 1500,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 200, // 1500,
       sender: customOptions.sender,
     }, customOptions);
   }
