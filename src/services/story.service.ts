@@ -14,6 +14,7 @@ import { StoryPointSender } from '../enums/story-point-sender.enum';
 import { UserInteractionHandlerService } from './user-interaction-handler.service';
 import { UserInteractionValidatorService } from './user-interaction-validator.service';
 import { Howl, Howler } from 'howler';
+import { Rsvp } from 'src/interfaces/rsvp.interface';
 const uuidv4 = require('uuid/v4');
 
 @Injectable()
@@ -29,6 +30,11 @@ export class StoryService {
   private isAutoChoose: boolean;
   private replayChoiceIndex: number;
   private rsvpApiUrl: string;
+  private currentSessionId: string;
+  private statusOpenedPage = 'Opened Page';
+  private statusEnteredName = 'Entered Name';
+  private statusGameOver = 'Game Over';
+  private statusSubmittedRSVP = 'Submitted RSVP';
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
@@ -52,6 +58,8 @@ export class StoryService {
   }
 
   public start() {
+    this.currentSessionId = uuidv4();
+    this.sendRSVPStatus(this.statusOpenedPage);
     this.proceed();
   }
 
@@ -70,6 +78,7 @@ export class StoryService {
   }
 
   public reset() {
+    this.currentSessionId = uuidv4();
     this.currentUserInteraction = {};
     this.events.next({
       type: StoryEventType.RESET
@@ -110,11 +119,17 @@ export class StoryService {
         console.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
-
         if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
           this.events.next({
             type: StoryEventType.BACK_UNLOCK
           });
+        }
+        if (storyPoint.options.cmd === StoryPointCommand.GAME_OVER) {
+          this.sendRSVPStatus(this.statusGameOver);
+        }
+        if (storyPoint.options.cmd === StoryPointCommand.SUBMIT_RSVP) {
+          this.sendRSVP();
+          this.sendRSVPStatus(this.statusSubmittedRSVP);
         }
 
         if (storyPoint.options.cmd === StoryPointCommand.RESET) {
@@ -161,13 +176,39 @@ export class StoryService {
     }
   }
 
-  sendRSVPStatus() {
-    const rsvpstatus: RsvpStatus = { Name: 'TestName', Status: 'SomethingHappened', Id: uuidv4() };
-    // this.http.get(this.rsvpApiUrl + 'rsvp').subscribe((data: any) => console.log(JSON.stringify(data)));
-    // this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus).subscribe((data: any) => console.log(JSON.stringify(data)));
-    const slackurl = 'https://hooks.slack.com/services/redacted';
-     this.http.post(slackurl, `{"text": ${JSON.stringify(JSON.stringify(rsvpstatus))}}`).subscribe((data: any) => console.log(JSON.stringify(data)));
+  sendRSVPStatus(status: string) {
+    let name = this.getGlobalVar('name').toString();
+    if (name === '') { name = 'No name yet'; }
 
+    const rsvpstatus: RsvpStatus = { Name: name, Status: status, SessionId: this.currentSessionId };
+    this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus).subscribe(
+      (data: any) => console.log('POST RSVPStatus' + JSON.stringify(data)),
+      error => console.log('Error in POST RSVPStatus' + JSON.stringify(error)
+      ));
+  }
+
+  sendRSVP() {
+    let Name = this.getGlobalVar('name').toString();
+    if (Name === '') { Name = 'No name yet'; }
+    const IsAttending = this.getGlobalVar('isAttending') === 1;
+    const OtherNames = this.getGlobalVar('otherNames').toString();
+    const EmailOrPhone = this.getGlobalVar('emailOrPhone').toString();
+    const Comments = this.getGlobalVar('comments').toString();
+    const DietaryRequirements = this.getGlobalVar('dietaryRequirements').toString();
+
+    const rsvp: Rsvp = { Name, SessionId: this.currentSessionId , IsAttending, OtherNames, EmailOrPhone, DietaryRequirements, Comments};
+    this.http.post(this.rsvpApiUrl + 'rsvp', rsvp).subscribe(
+      (data: any) => console.log('POST RSVP' + JSON.stringify(data)),
+      error => console.log('Error in POST RSVP' + JSON.stringify(error)
+      ));
+  }
+
+  private getGlobalVar(varName: string): string|number {
+    let value = '';
+    if (this.story.variablesState.GlobalVariableExistsWithName(varName)) {
+      value = this.story.variablesState._globalVariables.get(varName).value;
+    }
+    return value;
   }
 
   private validateAndSetStateForStringChoice(value: string) {
@@ -181,8 +222,9 @@ export class StoryService {
 
     if (this.currentUserInteraction.stateVar) {
       this.story.variablesState.$(this.currentUserInteraction.stateVar, value);
-      console.log('this.story.variablesState ' + this.story.variablesState);
-      this.sendRSVPStatus();
+      if (this.currentUserInteraction.stateVar === 'nameEntry') {
+        this.sendRSVPStatus(this.statusEnteredName);
+      }
     }
   }
 

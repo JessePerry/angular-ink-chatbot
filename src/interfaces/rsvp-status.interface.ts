@@ -1,5 +1,5 @@
 export interface RsvpStatus {
-  Id: string,
+  SessionId: string,
   Name: string,
   AtTime?: string,
   Status: string,
