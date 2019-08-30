@@ -1,4 +1,5 @@
 export enum UserInteractionType {
   DEFAULT = 'default',
-  TEXT = 'text'
+  TEXT = 'text',
+  MAILTO = 'mailto',
 }

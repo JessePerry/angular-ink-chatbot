@@ -1,6 +1,6 @@
 import * as inkjs from 'inkjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Choice } from 'inkjs';
 import { StoryPoint } from '../interfaces/story-point.interface';
@@ -15,6 +15,7 @@ import { UserInteractionHandlerService } from './user-interaction-handler.servic
 import { UserInteractionValidatorService } from './user-interaction-validator.service';
 import { Howl, Howler } from 'howler';
 import { Rsvp } from 'src/interfaces/rsvp.interface';
+import { Observable } from 'rxjs/Observable';
 const uuidv4 = require('uuid/v4');
 
 @Injectable()
@@ -24,6 +25,8 @@ export class StoryService {
   public story: any;
   public storyPoints: StoryPoint[];
   public choiceEntries: Choice[];
+  public rsvpSent: Rsvp;
+  public mailtoWithParams: string;
   private userInteractSound: Howl;
   private dialogSound: Howl;
   private swooshSound: Howl;
@@ -31,17 +34,18 @@ export class StoryService {
   private replayChoiceIndex: number;
   private rsvpApiUrl: string;
   private currentSessionId: string;
-  private statusOpenedPage = 'Opened Page';
+  private statusClicked = 'Clicked ';
   private statusEnteredName = 'Entered Name';
   private statusGameOver = 'Game Over';
   private statusSubmittedRSVP = 'Submitted RSVP';
+  private rsvpApiEncounteredError: boolean;
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
     private userInteractionValidatorService: UserInteractionValidatorService,
     private http: HttpClient
   ) {
-    this.rsvpApiUrl = 'https://redacted/';
+    this.rsvpApiUrl = 'https://9qsuphdvvl.execute-api.ap-southeast-2.amazonaws.com/Prod/';
     this.events = new Subject();
     this.story = new inkjs.Story(require('../ink/Wedding.ink.json'));
     this.storyPoints = [];
@@ -59,7 +63,6 @@ export class StoryService {
 
   public start() {
     this.currentSessionId = uuidv4();
-    this.sendRSVPStatus(this.statusOpenedPage);
     this.proceed();
   }
 
@@ -95,6 +98,9 @@ export class StoryService {
       this.story.ChooseChoiceIndex(0);
       this.choiceEntries.push({ index: 0, text: value, isTextEntry: true });
     } else {
+      if (this.choiceEntries.length === 0) {
+        this.sendRSVPStatus(this.statusClicked + value.text);
+      }
       this.story.ChooseChoiceIndex(value.index);
       this.choiceEntries.push(value);
     }
@@ -116,7 +122,7 @@ export class StoryService {
     if (this.story) {
       if (this.story.canContinue) {
         const storyMessage = this.story.Continue();
-        console.log(storyMessage);
+        this.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
         if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
@@ -130,6 +136,11 @@ export class StoryService {
         if (storyPoint.options.cmd === StoryPointCommand.SUBMIT_RSVP) {
           this.sendRSVP();
           this.sendRSVPStatus(this.statusSubmittedRSVP);
+          if (this.rsvpApiEncounteredError) {
+            // if sendRSVPStatus Failed, assume we can't connect to lambda, so just mailto instead.
+            this.setSendEmailInteraction();
+            return;
+          }
         }
 
         if (storyPoint.options.cmd === StoryPointCommand.RESET) {
@@ -176,15 +187,71 @@ export class StoryService {
     }
   }
 
+  setSendEmailInteraction() {
+    this.buildMailToParams();
+    const sorryMsg = `Terribly sorry, but it looks like I\'m having trouble saving your RSVP.
+            Please send your RSVP to jessewedlillian@gmail.com or click the button below.`;
+    const extraStoryPoint = {
+      // tslint:disable-next-line: max-line-length
+      displayMessage: sorryMsg,
+      originalMessage: sorryMsg,
+      options: this.buildStoryPointOptionsFromTag('{ "sender": 1 }')
+    }
+    this.storyPoints.push(extraStoryPoint);
+    this.events.next({
+      type: StoryEventType.STORY_POINT_ADDED,
+      data: extraStoryPoint
+    });
+
+    this.currentUserInteraction = { type: UserInteractionType.MAILTO }
+    this.events.next({
+      type: StoryEventType.USER_INTERACTION_STARTED,
+      data: this.currentUserInteraction
+    });
+  }
+
+  buildMailToParams() {
+    let subject = `${this.rsvpSent.Name}`;
+    if (this.rsvpSent.IsAttending) {
+      subject += ' is attending!';
+    } else {
+      subject += ' cannot attend.';
+    }
+    let body = `Hello guys,\n`;
+    body += `It's me: ${this.rsvpSent.Name}\n`;
+    if (this.rsvpSent.IsAttending) {
+      body += 'I am attending!\n';
+    } else {
+      body += 'Unfortunately, I cannot attend.\n';
+    }
+    if (this.rsvpSent.OtherNames !== '') {
+      body += `I\m responding on behalf of: ${this.rsvpSent.OtherNames}.\n`;
+    }
+    if (this.rsvpSent.DietaryRequirements !== '') {
+      body += `These are the dietary requirements: ${this.rsvpSent.DietaryRequirements}.\n`;
+    }
+    if (this.rsvpSent.Comments !== '') {
+      body += `I wanted to comment: ${this.rsvpSent.Comments}.\n`;
+    }
+    if (this.rsvpSent.EmailOrPhone !== '') {
+      body += `You can contact me at: ${this.rsvpSent.EmailOrPhone}.\n`;
+    }
+    body += `Kind regards, ${this.rsvpSent.Name}.\n`;
+
+    this.mailtoWithParams = `mailto:jessewedlillian@gmail.com
+?subject=${encodeURIComponent(subject)}
+&body=${encodeURIComponent(body)}`;
+  }
+
   sendRSVPStatus(status: string) {
     let name = this.getGlobalVar('name').toString();
     if (name === '') { name = 'No name yet'; }
 
     const rsvpstatus: RsvpStatus = { Name: name, Status: status, SessionId: this.currentSessionId };
-    this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus).subscribe(
-      (data: any) => console.log('POST RSVPStatus' + JSON.stringify(data)),
-      error => console.log('Error in POST RSVPStatus' + JSON.stringify(error)
-      ));
+    this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus, { responseType: 'text' }).subscribe(
+      (data: any) => this.log('POST RSVP Status ' + data),
+      error => { this.rsvpApiEncounteredError = true; console.log('Error in POST RSVP Status: ' + JSON.stringify(error)); }
+    );
   }
 
   sendRSVP() {
@@ -196,14 +263,14 @@ export class StoryService {
     const Comments = this.getGlobalVar('comments').toString();
     const DietaryRequirements = this.getGlobalVar('dietaryRequirements').toString();
 
-    const rsvp: Rsvp = { Name, SessionId: this.currentSessionId , IsAttending, OtherNames, EmailOrPhone, DietaryRequirements, Comments};
-    this.http.post(this.rsvpApiUrl + 'rsvp', rsvp).subscribe(
-      (data: any) => console.log('POST RSVP' + JSON.stringify(data)),
-      error => console.log('Error in POST RSVP' + JSON.stringify(error)
-      ));
+    this.rsvpSent = { Name, SessionId: this.currentSessionId, IsAttending, OtherNames, EmailOrPhone, DietaryRequirements, Comments };
+    this.http.post(this.rsvpApiUrl + 'rsvp', this.rsvpSent, { responseType: 'text' }).subscribe(
+      (data: any) => this.log('POST RSVP ' + data),
+      error => { this.rsvpApiEncounteredError = true; console.log('Error in POST RSVP ' + JSON.stringify(error)); }
+    );
   }
 
-  private getGlobalVar(varName: string): string|number {
+  private getGlobalVar(varName: string): string | number {
     let value = '';
     if (this.story.variablesState.GlobalVariableExistsWithName(varName)) {
       value = this.story.variablesState._globalVariables.get(varName).value;
@@ -264,5 +331,11 @@ export class StoryService {
       choices: choices,
       type: UserInteractionType.DEFAULT
     }, currentTag.userInteraction || {});
+  }
+
+  log(log: string) {
+    if (!process.env.production) {
+      console.log(log);
+    }
   }
 }

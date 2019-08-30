@@ -17,6 +17,7 @@ export class ActionBarComponent implements OnInit, OnChanges {
   @ViewChild('input') public inputElementRef: ElementRef;
 
   public inputValue: string;
+  public mailto: string;
 
   constructor(private storyService: StoryService) {}
 
@@ -36,6 +37,7 @@ export class ActionBarComponent implements OnInit, OnChanges {
         });
       }
     }
+    this.mailto = this.storyService.mailtoWithParams;
   }
 
   public trigger(value: Choice | string) {

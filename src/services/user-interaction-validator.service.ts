@@ -27,7 +27,6 @@ export class UserInteractionValidatorService {
   }
 
   private validateName(value: any): string | null {
-    // console.log(`validateName: ${value}`);
     value = String(value);
     if (value === '') {
       return 'nameIsEmpty'
