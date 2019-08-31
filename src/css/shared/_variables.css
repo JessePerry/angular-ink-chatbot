@@ -21,6 +21,14 @@
 
   --ff-background: #f1f1f1;
 
+  /* Invitation colors */
+  --ff-gold: #dda830; /* Headings */
+  --ff-darkblue: #145056; /* Border */
+  --ff-midblue: #76a3b7; /* Roads */
+  --ff-lightblue: #e0f2f2; /* River */
+  --ff-red: #c12131; /* Heart */
+  --ff-lightgreen: #e8ece6; /* Circle */
+
   /* Spacing */
 
   --ff-bleed-x: 16px;
