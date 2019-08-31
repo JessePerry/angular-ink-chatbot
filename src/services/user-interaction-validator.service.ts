@@ -46,4 +46,8 @@ export class UserInteractionValidatorService {
   private validateComments(value: string) {
     return this.validateName(value);
   }
+
+  private validateDiet(value: string) {
+    return this.validateName(value);
+  }
 }

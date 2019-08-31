@@ -87,6 +87,7 @@ export class StoryService {
       type: StoryEventType.RESET
     });
     this.story.ResetState();
+    this.story.variablesState._globalVariables.set('backUnlocked', '1');
     this.storyPoints = [];
     this.choiceEntries = [];
     this.proceed();
@@ -125,11 +126,11 @@ export class StoryService {
         this.log(storyMessage);
         const storyPoint = this.buildStoryPointFromMessage(storyMessage);
 
-        if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
+        // if (storyPoint.options.cmd === StoryPointCommand.BACK_UNLOCK) {
           this.events.next({
             type: StoryEventType.BACK_UNLOCK
           });
-        }
+        // }
         if (storyPoint.options.cmd === StoryPointCommand.GAME_OVER) {
           this.sendRSVPStatus(this.statusGameOver);
         }
@@ -261,7 +262,7 @@ export class StoryService {
     const OtherNames = this.getGlobalVar('otherNames').toString();
     const EmailOrPhone = this.getGlobalVar('emailOrPhone').toString();
     const Comments = this.getGlobalVar('comments').toString();
-    const DietaryRequirements = this.getGlobalVar('dietaryRequirements').toString();
+    const DietaryRequirements = this.getGlobalVar('diet').toString();
 
     this.rsvpSent = { Name, SessionId: this.currentSessionId, IsAttending, OtherNames, EmailOrPhone, DietaryRequirements, Comments };
     this.http.post(this.rsvpApiUrl + 'rsvp', this.rsvpSent, { responseType: 'text' }).subscribe(

@@ -57,6 +57,10 @@ export class UserInteractionHandlerService {
     this.story.variablesState.$('comments', `"${value}"`);
   }
 
+  private dietHandler(value: string) {
+    this.story.variablesState.$('diet', `"${value}"`);
+  }
+
   private getAppropriateEarlierAlphaLetter(letter: string): string {
     if (letter === 'a') { return letter; } // Don't loop to z. Eg: Aaron would be Aaaron
     const acceptableLetters = /[abcdfghjkmnpqrstvqxyz]/g // Don't use vowels or I or L because of font readability
