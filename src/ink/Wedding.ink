@@ -4,6 +4,7 @@ VAR nameLowerAlpha = ""
 VAR dress = 0 // 1 cocktail, 2 space
 VAR validationError = 0
 VAR backUnlocked = 0
+VAR dance = ""
 
 VAR retrying = 0
 VAR isAttending = 0
@@ -24,11 +25,14 @@ VAR diet = ""
 It is an amazing spring afternoon in the southern highlands of New South Wales. The drive was easier than you expected.
 The clock on the dashboard reads 4:30PM, just in time! You leave the car as you fix yourself up and look for where to go. There is a beautifully trimmed hedgeline which follows a path.
 + [Walk to entrance]
+
 You head to the entrance
 -> entry
 
 === entry ===
-A smartly dressed man greets you at the front door.
+<img src="assets/images/Biota.png">
+  * [...]
+- A smartly dressed man greets you at the front door.
 <img src="assets/images/dom-212x381.png">
 <strong>Good afternoon!</strong> Are you here for the wedding of Jesse and Lillian? # { "sender": 1 }
 
@@ -86,11 +90,18 @@ You did read the dress code, right? # { "sender": 1 }
 
 === cocktail
 ~ dress = 1
-todo: correct choice so reward player. write reaction.
+That's right and I can see you're dressed appropriately and might I also say, quite fashionably? # { "sender": 1 }
+  * Oh thank you. # { "sender": 2 }
+You chose the correct dress code! Thanks for reading the invitation. 10 points.
 -> enterCeremony
 
 === blackTie
-todo: make fun of player for getting the choice wrong, show game end.
+Actually I'm afraid that it is not black tie. You must be looking for another wedding. # { "sender": 1 }
+  * But I'm all dressed up! # { "sender": 2 }
+Sorry, but that's game over for you. Don't worry, this is a game and you can try again. # { "sender": 1 }
+
+You are rejected at the door and didn't make it to the wedding!
+THE END.
 -> start_over
 
 === spaceTheme
@@ -99,7 +110,7 @@ You draw down the visor on your helmet. You were wearing a helmet this whole tim
 Luckily you are a master of role-play, and decide to put on a voice like you're communicating through a space radio.
 Kch, permissions to enter the wedding Houston. Over. Ksh. # { "sender": 2 }
 The man is frozen with his mouth wide open and you think maybe you've made a huge mistake.
-+  [Wait]
++  [...]
 You wait a second.
 -> spaceReaction
 
@@ -113,7 +124,7 @@ Houston opens the door and you head inside!
 -> enterCeremony
 
 === enterCeremony
-{dress == 1: It looks black tie optional, everyone looks completely gorgeous and in their element.}
+{dress == 1: As a cocktail dress code, everyone looks completely gorgeous and in their element.}
 {dress == 2: You can hear the faint bleeps and bloops of space technology as you enter a dark hall. It's hard to see through the thick mist on the floor but it feels like sand beneath your white gumboots (space boots). You begin to walk as if in low-gravity with long slow steps and your cheeks puffed out.}
   * [Look around]
 - There seems to be chairs {dress == 1: draped in with floral arrangement.} {dress == 2: covered in space dust.}
@@ -138,7 +149,7 @@ It's these damn heels on the grass ha-ha. # { "sender": 1 }
 The man apologies and introduces the guys.
 You successfully avoided Karen!
   * Yay! How many points do I get? # { "sender": 2 }
-  - Oh let's say: 100 points.
+  - Oh, let's say: 100 points.
   * Woo hoo! # { "sender": 2 }
 -> takeSeats
 
@@ -173,19 +184,15 @@ Should anyone here present know of any reason that this couple should <strong>no
   * "Um, actually." # { "sender": 2 }
   -> umactually
   * [Keep your mouth shut]
-- A stunned silence falls on the crowd.
+- A silence falls on the crowd.
 
 - You may now kiss the bride! # { "sender": 1 }
 Kissing ensues.
-[Note]: Insert kissing picture here. Lillian: No.
+[Note]: Insert kissing picture here. Lillian: "No".
   * Hooray! # { "sender": 2 }
 - The celebrations continue into the evening until it's time to eat!
-You enter the Biota resturant interior and see a few tables and chairs, but you're wondering where to sit!
-  * We already did the seating thing.
-- Yeah I know, let me finish.
  * [...]
-- As I was saying...
-You see tables, with a broad selection of foods available! It seems to be a cocktail style dinner with big food stations around the room so you can enjoy what you like.
+- You see tables, with a broad selection of foods available! It seems to be a cocktail style dinner with big food stations around the room so you can enjoy what you like.
 There's a meat station with beef and pork cuts; A seafood station with sushi; and many others!
 <img src="assets/images/Diet.png"/>
 A small child appears at your feed with a non-specific food item in hand, offering it to you.
@@ -196,8 +203,8 @@ A small child appears at your feed with a non-specific food item in hand, offeri
   * Thanks but I'm allergic # { "sender": 2 }
   Oh what are you allergic to? # { "sender": 1 }
   -> otherallergy
- * Thanks! # { "sender": 2 }
-- You take the food and it's delicious.
+  * Thanks! # { "sender": 2 }
+  - You take the food and it's delicious.
 -> eatfood
 
 == otherallergy
@@ -222,7 +229,7 @@ The elequent child scurries away.
 You enjoy the food and the company, meeting all the relatives and friends of the wedding. Lauging and drinking maybe too much, but hey, it's a wedding!
 You hear some loud music and realize that a dancefloor is forming.
   * [Join the dancing]
-  -> dance
+  -> dancefloor
   * [Eat and drink more]
   -> drink1
 
@@ -230,7 +237,7 @@ You hear some loud music and realize that a dancefloor is forming.
 You continue to enjoy the limitless champagne and food. It seems to get even more delicious the more you have!
 The music is getting louder and more guests join the dancefloor.
   * [Join the dancing]
-  -> dance
+  -> dancefloor
   * [Eat and drink more]
   -> drink2
 
@@ -238,27 +245,113 @@ The music is getting louder and more guests join the dancefloor.
 You notice that there isn't just champagne but also a selection of wine and beers!
   * [Try them all!]
 - You try them all! Why not?
-A few mintues pass (2 hours in reality) and you decide it's finally time to hit the dancefloor.
+A few mintues pass (3 hours in reality) and you decide it's finally time to hit the dancefloor.
 * [Step aside losers! Here's how you dance!]
 - Tthepasside losers! Ith dance time for me woooooO! # { "sender": 2 }
 You stumble onto the dance floor and the music is pumping.
 You do your signature move: The Fall-flat-on-face.
   * [Ow]
-- The next thing you remember is waking up on the lawn and your head is splitting. Some kind soul must have dragged you off the dancefloor. Lucky you were able to pull off your special move before you passed out, but your drunken stupor made you miss half the wedding!
+- The next thing you remember is waking up on the lawn and your head is splitting. Some kind soul must have dragged you off the dancefloor. Lucky you were able to pull off your special move before you passed out. But your drunken stupor made you miss half the wedding!
 
 THE END.
 -> start_over
 
-== dance
-todo: dancing and a professional dancer wants your contact information.
-todo:  Dancing impress everyone
+== dancefloor
+The dancefloor is heaving with hits from the 90's.
+  * Shuffle to the DJ booth
+    You shuffle and swing your way through the crowd to the DJ booth.
+    * * Play Jesse's Girl! # {"sender": 2 }
+      The DJ doesn't have time to respond because a shoe comes flying through the air, hitting you in the head!
+      Jesse yells over the crowd:
+      Don't play that song! And sorry about the shoe! # { "sender": 1 }
+      Dejected. You swing back to the dancefloor.
+    * * Play Bon Jovi! # {"sender": 2 }
+      Sorry, Bon Jovi is on the <strong>do-not-play</strong> list especially!  # { "sender": 1 }
+      Dejected. You swing back to the dancefloor.
+    * * [Compliment the DJ]
+      You yell:
+      This is a really good song list and you're doing a great job! # { "sender": 2 }
+      Thank you! The couple put a lot of effort to please the crowd and thanks for respecting their taste by not requesting a song!  # { "sender": 1 }
+      Back to the dancefloor.
+  * Swing to the center floor
+    You swing and shuffle through the crowd to the center dance floor
+- Time for your signature move:
+  * The Two-step
+    ~ dance = "Two-step"
+    You step once. You step twice!
+  * The Microwave
+    ~ dance = "Microwave"
+    You play sharades for a moment, pressing buttons on an invisible microwave to the beat. Eventually, you freestyle all-out to represent the microwaves bouncing around.
+  * The Charleston
+    ~ dance = "Charleston"
+    You kick your feet up, swinging back and forth. You find a partner and they do the Charleston too, but not too close because we have to leave room for Jesus.
+- The DJ sees your move and immediately stops the music.
+  * [...]
+- The guests stop dancing and you hear whispers among the crowd:
+Did you see that move! # { "sender": 1 }
+Oh wow, are they a professional dancer? # { "sender": 1 }
+I'm in shock at how smooth those moves were! # { "sender": 1 }
+  * [...]
+- The DJ's mouth is agape, but they recompose themselves and resume the music again. Dancing ensues.
+The DJ motions for you to come over.
+That was an amazing move! I've never seen anything like that in all my life! # { "sender": 1 }
+  * Thank you, I call it the {dance}. # { "sender": 2 }
+-> dancingEmailOrPhone
 
-todo:  How to finish?
-todo:  Choices have cause and effect!
+== dancingEmailOrPhone
+Could I please get your phone number or email address so I can contact you for some dancing work (So Jesse and Lillian can reach you)? # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Email or phone number here", "stateVar": "emailOrPhoneEntry", "type": "text", "handler": "emailOrPhoneHandler", "validator": "emailOrPhone" } }
+    + \ {emailOrPhone}. # { "sender": 2 }
+- {
+    - validationError == 0 : -> leavedance
+    - else: -> dancingEmailOrPhone_validation_error
+}
+-> DONE
 
--> start_over
+= dancingEmailOrPhone_validation_error
+Sorry? I didn't quite catch that. # { "sender": 1 }
+-> rsvpEmailOrPhone
 
--> END
+== leavedance
+Thank you so much! # { "sender": 1 }
+
+You continue to dance well into the night, laughing and having a great time.
+
+As the evening goes on and the guests reach their various bed-times, you too, decide to get the train home.
+  * [But I drove here]
+    Ah! Thanks for reminding me! Well, lucky all that dancing has made you sober for the drive home!
+  * [But I drove here with...]
+    Wait, someone was with you this whole time? And the narrator completely ignored them?! (Are you RSVPing on behalf of another guest?)
+    * * Yes # { "sender": 2 }
+      -> onBehalfYes
+    * * No # { "sender": 2 }
+      Ok, good. Otherwise that would have been pretty lazy writing!
+- Back to the car.
+-> bestending
+
+== onBehalfYes
+Who are they? # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Their names here", "stateVar": "otherNamesEntry", "type": "text", "handler": "otherNamesHandler", "validator": "name" } }
+    + \ They are {otherNames}. # { "sender": 2 }
+- {
+    - validationError == 0: Thank you. # { "sender": 1}
+      -> bestending
+    - else: -> onBehalfYesOtherNames_validation_error
+}
+-> DONE
+
+= onBehalfYesOtherNames_validation_error
+Sorry? I didn't quite catch that. # { "sender": 1 }
+-> onBehalfYes
+
+== bestending
+~ isAttending = 1
+You step into your car, where this adventure began.
+You breathe a sigh as you remenisce on a wonderful evening at probably the best wedding ever!
+
+Congratulations, you made it through the wedding and reached the best ending!
+  * [Hooray!]
+-> rsvpComments
 
 == statue
 You don't have time for seats. Life as a professional living statue has left you with a lust for stillness and you will be satisfied!
@@ -273,12 +366,12 @@ THE END.
 -> start_over
 
 == umactually
-Look, I just think we should all take a breather on this. I'm not totally convinced these two are in love enough to.. # { "sender": 2 }
+Look, I just think we should all take a breather on this. I'm not totally convinced these two are in love "enough"- # { "sender": 2 }
 You are interrupted when a flying shoe hits you in the head, knocking you out!
-  * [A shoe?]
+  * [...]
 - Karen stands up.
-Oh sorry! Whoops! It's these damn heels what a crazy accident. Don't worry everyone. I can take them in an ambulance. Bye! # { "sender": 1 }
-Just like that, you are whisked away in an ambulance with Karen. No chance to interrupt the wedding anymore, what a shame.
+Oh sorry! Whoops! It's these damn heels. What a crazy accident. Don't worry everyone. I can take them in an ambulance. Bye! # { "sender": 1 }
+Just like that, you are whisked away in an ambulance with Karen. No chance to interrupt the wedding anymore. What a shame.
 THE END.
 
 -> start_over
@@ -357,14 +450,14 @@ Would you like to respond on behalf of another guest? Or they can play the game 
 + Yes # { "sender": 2 }
 -> rsvpOnBehalfYes
 + No # { "sender": 2 }
--> rsvpEmailOrPhone
+-> rsvpOtherallergy
 
 == rsvpOnBehalfYes
 Who are they? # { "sender": 1 }
 # { "userInteraction": { "placeholder": "Their names here", "stateVar": "otherNamesEntry", "type": "text", "handler": "otherNamesHandler", "validator": "name" } }
     + \ They are {otherNames}. # { "sender": 2 }
 - {
-    - validationError == 0 && retrying == 0: -> rsvpEmailOrPhone
+    - validationError == 0 && retrying == 0: -> rsvpOtherallergy
     - validationError == 0 && retrying == 1: -> rsvpCheckForm
     - else: -> otherNames_validation_error
 }
@@ -373,6 +466,29 @@ Who are they? # { "sender": 1 }
 = otherNames_validation_error
 Sorry? I didn't quite catch that. # { "sender": 1 }
 -> rsvpOnBehalfYes
+
+== rsvpOtherallergy
+Do you have any specific dietary requirements? # { "sender": 1 }
+
++ Yes # { "sender": 2 }
+-> rsvpOtherallergyYes
++ No # { "sender": 2 }
+-> rsvpEmailOrPhone
+
+== rsvpOtherallergyYes
+What are your diet requirements? # { "sender": 1 }
+# { "userInteraction": { "placeholder": "Enter your diet...", "stateVar": "dietEntry", "type": "text", "handler": "dietHandler", "validator": "diet" } }
+    + \ {diet}. # { "sender": 2 }
+- {
+    - validationError == 0 && retrying == 0: -> rsvpEmailOrPhone
+    - validationError == 0 && retrying == 1: -> rsvpCheckForm
+    - else: -> rsvpDiet_validation_error
+}
+-> DONE
+
+= rsvpDiet_validation_error
+Sorry? I didn't quite catch that. # { "sender": 1 }
+-> rsvpOtherallergyYes
 
 == rsvpEmailOrPhone
 Please give us a way to contact you with an email or phone number. # { "sender": 1 }
@@ -412,9 +528,13 @@ Sorry? I didn't quite catch that. # { "sender": 1 }
 
 == rsvpCheckForm
 You are: {name}
-You are {isAttending == 0: not} attending the wedding.
+You <strong>are {isAttending == 0: not} </strong> attending the wedding.
 - {
   - otherNames != "": You are responding on behalf of: {otherNames}
+  - else: You are not responding on behalf of another guest.
+}
+- {
+  - diet != "": Your diet requirements: {diet}
 }
 Your Email or Phone number is: {emailOrPhone}
 - {
@@ -437,6 +557,8 @@ What would you like to edit? # { "sender": 1 }
  -> rsvpAttending
 + Other names # { "sender": 2 }
  -> rsvpOnBehalf
+ + Diet # { "sender": 2 }
+ -> rsvpOtherallergy
 + Email or phone # { "sender": 2 }
  -> rsvpEmailOrPhone
 + Comments # { "sender": 2 }
