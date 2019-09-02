@@ -312,7 +312,7 @@ export class StoryService {
       return customOptions;
     }
     return Object.assign({
-      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 200, // 1500,
+      delay: (customOptions.sender === StoryPointSender.USER) ? 0 : 500, // 1500,
       sender: customOptions.sender,
     }, customOptions);
   }

@@ -22,7 +22,7 @@ VAR diet = ""
 -> start
 == start
 <strong>BIOTA, 1st November, 2019</strong>
-It is an amazing spring afternoon in the southern highlands of New South Wales. The drive was easier than you expected.
+It is an amazing Spring afternoon in the southern highlands of New South Wales. The drive was easier than you expected.
 The clock on the dashboard reads 4:30PM, just in time! You leave the car as you fix yourself up and look for where to go. There is a beautifully trimmed hedgeline which follows a path.
 + [Walk to entrance]
 
@@ -40,8 +40,6 @@ You head to the entrance
 -> iam
 + You bet I am! # { "sender": 2 }
 -> iamenthused
-+ I want to skip to the RSVP part # { "sender": 2 }
--> rsvp
 
 === iamenthused ===
 You gesture with a swingin' thumbs up.
@@ -570,8 +568,9 @@ What would you like to edit? # { "sender": 1 }
 ~ retrying = 0
 # { "cmd": "SUBMIT_RSVP" }
 I have saved your RSVP information. Thanks so much for playing! # { "sender": 1 }
-
--> start_over
+  * [Restart]
+- # { "cmd": "RESET" }
+-> start
 
 == start_over
 - Want to start over?
