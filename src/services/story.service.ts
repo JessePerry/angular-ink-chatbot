@@ -68,7 +68,7 @@ export class StoryService {
 
 
   public back() {
-    this.choiceEntries.pop();
+    this.choicesTrimBackToLastMulti();
     this.replayChoiceIndex = 0;
     // Reset, then proceed with isAutoChoose on.
     this.events.next({
@@ -78,6 +78,18 @@ export class StoryService {
     this.storyPoints = [];
     this.isAutoChoose = true;
     this.proceed();
+  }
+
+  choicesTrimBackToLastMulti() {
+    let indexOfLastMultiOrEntry = 0;
+    for (let index = this.choiceEntries.length - 1; index > 1; index--) {
+      const element = this.choiceEntries[index];
+      if (!element.isSingleOption || element.isTextEntry) {
+        indexOfLastMultiOrEntry = index;
+        break;
+      }
+    }
+    this.choiceEntries.splice(indexOfLastMultiOrEntry, this.choiceEntries.length - indexOfLastMultiOrEntry);
   }
 
   public reset() {
@@ -97,7 +109,7 @@ export class StoryService {
     if (typeof value === 'string') {
       this.validateAndSetStateForStringChoice(value);
       this.story.ChooseChoiceIndex(0);
-      this.choiceEntries.push({ index: 0, text: value, isTextEntry: true });
+      this.choiceEntries.push({ index: 0, text: value, isTextEntry: true, isSingleOption: true });
     } else {
       if (this.choiceEntries.length === 0) {
         this.sendRSVPStatus(this.statusClicked + value.text);
@@ -319,12 +331,13 @@ export class StoryService {
 
   private buildUserInteractionFromChoices(choices: Choice[]): UserInteraction {
     const currentTag = this.story.currentTags.length > 0 ? JSON.parse(this.story.currentTags[0]) : {};
-
+    const isSingleOption = choices.length === 1;
     choices = choices.map(c => {
       return {
         index: c.index,
         text: c.text,
-        isTextEntry: c.isTextEntry
+        isTextEntry: c.isTextEntry,
+        isSingleOption,
       };
     });
 

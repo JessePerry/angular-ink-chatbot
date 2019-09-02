@@ -7,5 +7,6 @@ declare module 'inkjs' {
     index: number;
     text: string;
     isTextEntry: boolean;
+    isSingleOption: boolean;
   }
 }
