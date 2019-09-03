@@ -1,3 +1,5 @@
+import { Duration } from 'moment';
+
 export interface Rsvp {
   SessionId: string,
   Name: string,
@@ -7,4 +9,6 @@ export interface Rsvp {
   DietaryRequirements?: string;
   EmailOrPhone?: string;
   Comments?: string;
+  PlayTime?: number;
+  ChoicesMadeCount?: number;
 }

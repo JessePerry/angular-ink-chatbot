@@ -16,6 +16,7 @@ import { UserInteractionValidatorService } from './user-interaction-validator.se
 import { Howl, Howler } from 'howler';
 import { Rsvp } from 'src/interfaces/rsvp.interface';
 import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment'
 const uuidv4 = require('uuid/v4');
 
 @Injectable()
@@ -39,6 +40,7 @@ export class StoryService {
   private statusGameOver = 'Game Over';
   private statusSubmittedRSVP = 'Submitted RSVP';
   private rsvpApiEncounteredError: boolean;
+  private startTime: any;
 
   constructor(
     private userInteractionHandlerService: UserInteractionHandlerService,
@@ -64,6 +66,7 @@ export class StoryService {
   public start() {
     this.currentSessionId = uuidv4();
     this.proceed();
+    this.startTime = moment();
   }
 
 
@@ -93,6 +96,7 @@ export class StoryService {
   }
 
   public reset() {
+    this.startTime = moment();
     this.currentSessionId = uuidv4();
     this.currentUserInteraction = {};
     this.events.next({
@@ -259,8 +263,10 @@ export class StoryService {
   sendRSVPStatus(status: string) {
     let name = this.getGlobalVar('name').toString();
     if (name === '') { name = 'No name yet'; }
+    const PlayTime = moment().diff(this.startTime);
+    const ChoicesMadeCount = this.choiceEntries.length;
 
-    const rsvpstatus: RsvpStatus = { Name: name, Status: status, SessionId: this.currentSessionId };
+    const rsvpstatus: RsvpStatus = { Name: name, Status: status, SessionId: this.currentSessionId, PlayTime, ChoicesMadeCount };
     this.http.post(this.rsvpApiUrl + 'rsvpstatus', rsvpstatus, { responseType: 'text' }).subscribe(
       (data: any) => this.log('POST RSVP Status ' + data),
       error => { this.rsvpApiEncounteredError = true; console.log('Error in POST RSVP Status: ' + JSON.stringify(error)); }
@@ -275,8 +281,11 @@ export class StoryService {
     const EmailOrPhone = this.getGlobalVar('emailOrPhone').toString();
     const Comments = this.getGlobalVar('comments').toString();
     const DietaryRequirements = this.getGlobalVar('diet').toString();
+    const PlayTime = moment().diff(this.startTime);
+    const ChoicesMadeCount = this.choiceEntries.length;
 
-    this.rsvpSent = { Name, SessionId: this.currentSessionId, IsAttending, OtherNames, EmailOrPhone, DietaryRequirements, Comments };
+    this.rsvpSent = { Name, SessionId: this.currentSessionId, IsAttending,
+      OtherNames, EmailOrPhone, DietaryRequirements, Comments, PlayTime, ChoicesMadeCount };
     this.http.post(this.rsvpApiUrl + 'rsvp', this.rsvpSent, { responseType: 'text' }).subscribe(
       (data: any) => this.log('POST RSVP ' + data),
       error => { this.rsvpApiEncounteredError = true; console.log('Error in POST RSVP ' + JSON.stringify(error)); }
