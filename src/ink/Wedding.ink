@@ -297,6 +297,7 @@ Thank you so much! # { "sender": 1 }
 You continue to dance well into the night, laughing and having a great time.
 
 As the evening goes on and the guests reach their various bedtimes, you too, decide to head off.
+  * [...]
 -> bestending
 
 == bestending
@@ -316,8 +317,6 @@ You get a strange urge to look up at the evening sky. You admire the intense nat
 Hello there, potential wedding guest. # { "sender": 1 }
 
 + Conscience? # { "sender": 2 }
--> rsvpSysAdmin
-+ Mum? # { "sender": 2 }
 -> rsvpSysAdmin
 
 == rsvpSysAdmin
@@ -508,8 +507,10 @@ I have saved your RSVP information. Thanks so much for playing! # { "sender": 1 
 -> start
 
 == start_over
-- Want to start over?
-    + [Yes please.] -> backUnlockThenStart
+- Want to start over (or you can hit the back button at the top)?
+    + [Yes please.]
+    # { "cmd": "RESET" }
+    -> start
     + No, thank you. # { "sender": 2 }
       You're welcome, thanks for playing!
       -> END
