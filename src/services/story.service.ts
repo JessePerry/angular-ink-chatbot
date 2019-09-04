@@ -31,6 +31,12 @@ export class StoryService {
   private userInteractSound: Howl;
   private dialogSound: Howl;
   private swooshSound: Howl;
+  private songOutdoor: Howl;
+  private songEntry: Howl;
+  private songCeremony: Howl;
+  private songDance: Howl;
+  private songPartyAmbience: Howl;
+  private currentSong: Howl;
   private isAutoChoose: boolean;
   private replayChoiceIndex: number;
   private rsvpApiUrl: string;
@@ -58,7 +64,16 @@ export class StoryService {
     this.userInteractSound = new Howl({ src: ['./assets/sounds/button-4.mp3'], volume: 0.7 }); // https://danielstern.github.io/ngAudio/#/
     this.dialogSound = new Howl({ src: ['./assets/sounds/button-1.mp3'], volume: 0.3 });
     this.swooshSound = new Howl({ src: ['./assets/sounds/swoosh.mp3'], volume: 0.3 }); // http://soundbible.com/670-Swooshing.html
+    // https://freesound.org/people/blouhond/sounds/157947/
+    this.songOutdoor = new Howl({ src: ['./assets/sounds/outdoorAmbience.mp3'], volume: 1, loop: true });
+    // https://www.liberliber.it/online/autori/autori-c/petr-ilic-cajkovskij/lo-schiaccianoci-scelkuncik-op-71/
+    this.songEntry = new Howl({ src: ['./assets/sounds/WaltzOfFlowersTrimFade.mp3'], volume: 0.5, loop: true});
+    // Pachelbel Canon in D http://www.gyrosquartet.com/audio/Pachelbel.mp3
+    this.songCeremony = new Howl({ src: ['./assets/sounds/Pachelbel.mp3'], volume: 0.5, loop: true});
+    // https://www.youtube.com/watch?v=P-QY1OF2x2E Haddaway - What is Love Original Instrumental
+    this.songDance = new Howl({ src: ['./assets/sounds/whatislove.mp3'], volume: 0.5, loop: true });
     // http://soundbible.com/2163-Party-Crowd.html
+    this.songPartyAmbience = new Howl({ src: ['./assets/sounds/partycrowd.mp3'], volume: 0.2, loop: true });
 
     Howler.volume(1);
   }
@@ -69,8 +84,11 @@ export class StoryService {
     this.startTime = moment();
   }
 
-
   public back() {
+    if (this.currentSong) {
+      this.currentSong.stop();
+      this.currentSong = undefined as Howl;
+    }
     this.choicesTrimBackToLastMulti();
     this.replayChoiceIndex = 0;
     // Reset, then proceed with isAutoChoose on.
@@ -96,6 +114,10 @@ export class StoryService {
   }
 
   public reset() {
+    if (this.currentSong) {
+      this.currentSong.stop();
+      this.currentSong = undefined as Howl;
+    }
     this.startTime = moment();
     this.currentSessionId = uuidv4();
     this.currentUserInteraction = {};
@@ -147,6 +169,8 @@ export class StoryService {
             type: StoryEventType.BACK_UNLOCK
           });
         // }
+
+        this.playSongOnRepeat(storyPoint.options.cmd)
         if (storyPoint.options.cmd === StoryPointCommand.GAME_OVER) {
           this.sendRSVPStatus(this.statusGameOver);
         }
@@ -171,7 +195,7 @@ export class StoryService {
               } else if (storyPoint.options.sender === StoryPointSender.USER) {
                 this.userInteractSound.play();
               } else {
-                // this.swooshSound.play();
+                this.swooshSound.play();
               }
             }
             this.storyPoints.push(storyPoint);
@@ -202,6 +226,32 @@ export class StoryService {
         }
       }
     }
+  }
+  playSongOnRepeat(cmd: StoryPointCommand) {
+    if (cmd === StoryPointCommand.SONG_OUTDOOR) {
+      this.playNextFadeOutPrevious(this.songOutdoor, 1.0);
+    } else if (cmd === StoryPointCommand.SONG_ENTRY) {
+      this.playNextFadeOutPrevious(this.songEntry, 0.5);
+    } else if (cmd === StoryPointCommand.SONG_CEREMONY) {
+      this.playNextFadeOutPrevious(this.songCeremony, 0.5);
+    } else if (cmd === StoryPointCommand.SONG_DANCE) {
+      this.playNextFadeOutPrevious(this.songDance, 0.5);
+    } else if (cmd === StoryPointCommand.SONG_PARTYAMBIENCE) {
+      this.playNextFadeOutPrevious(this.songPartyAmbience, 0.2);
+    }
+  }
+
+  playNextFadeOutPrevious(newTrack: Howl, newTrackVol: number) {
+    if (this.currentSong !== undefined) {
+      this.currentSong.once( 'fade', () => {
+        this.currentSong.stop(); });
+      this.currentSong.fade(this.currentSong.volume(), 0, 1000);
+    }
+    newTrack.once( 'fade', () => {
+      this.currentSong = newTrack;
+    });
+    newTrack.fade(0, newTrackVol, 2000);
+    newTrack.play();
   }
 
   setSendEmailInteraction() {
@@ -284,8 +334,10 @@ export class StoryService {
     const PlayTime = moment().diff(this.startTime);
     const ChoicesMadeCount = this.choiceEntries.length;
 
-    this.rsvpSent = { Name, SessionId: this.currentSessionId, IsAttending,
-      OtherNames, EmailOrPhone, DietaryRequirements, Comments, PlayTime, ChoicesMadeCount };
+    this.rsvpSent = {
+      Name, SessionId: this.currentSessionId, IsAttending,
+      OtherNames, EmailOrPhone, DietaryRequirements, Comments, PlayTime, ChoicesMadeCount
+    };
     this.http.post(this.rsvpApiUrl + 'rsvp', this.rsvpSent, { responseType: 'text' }).subscribe(
       (data: any) => this.log('POST RSVP ' + data),
       error => { this.rsvpApiEncounteredError = true; console.log('Error in POST RSVP ' + JSON.stringify(error)); }

@@ -30,6 +30,7 @@ You head to the entrance
 -> entry
 
 === entry ===
+# { "cmd": "SONG_OUTDOOR" }
 <img src="assets/images/Biota.png">
   * [...]
 - A smartly dressed man greets you at the front door.
@@ -90,7 +91,8 @@ You did read the dress code, right? # { "sender": 1 }
 ~ dress = 1
 That's right and I can see you're dressed appropriately and might I also say, quite fashionably? # { "sender": 1 }
   * Oh thank you. # { "sender": 2 }
-You chose the correct dress code! Thanks for reading the invitation. If this was a point scoring game then you’d have 10 points.
+You chose the correct dress code! Thanks for reading the invitation. If this was a point scoring game then you’d have 10 points!
+The man opens the door and you head inside.
 -> enterCeremony
 
 === blackTie
@@ -122,6 +124,7 @@ Houston opens the door and you head inside!
 -> enterCeremony
 
 === enterCeremony
+# { "cmd": "SONG_ENTRY" }
 {dress == 1: As a cocktail dress code, everyone looks completely gorgeous and in their element.}
 {dress == 2: You can hear the faint bleeps and bloops of space technology as you enter a dark hall. It's hard to see through the thick mist on the floor but it feels like sand beneath your white space boots. You begin to walk as if in low-gravity with long slow steps and your cheeks puffed out.}
   * [Look around]
@@ -154,14 +157,17 @@ You successfully avoided Karen!
 === hiKaren
 {name}! I haven’t seen you in forever, you look amazing, I love your outfit but it's a bit out there huh? You're so brave! I feel like I made a mistake with these heels, haha. # { "sender": 1 }
 Karen is a sweetheart but you think the backhanded compliments are a bit much.
+  * [...]
 -> takeSeats
 
 == takeSeats
+# { "cmd": "SONG_CEREMONY" }
 You hear an announcement:
 Ladies and Gentlemen would you please be seated as the bride and groom will be arriving shortly. # { "sender": 1 }
 - You hear Karen scream:
 Awwwmigooosh here they come! Ahhhh! # { "sender": 1 }
-Sure enough, Lillian and Jesse both appear in turn with various bridesmaids and groomsmen in tow. But let's be honest, this game is about you, not them. So let's gloss over this part.
+  * [...]
+- Sure enough, Lillian and Jesse both appear in turn with various bridesmaids and groomsmen in tow. But let's be honest, this game is about you, not them. So let's gloss over this part.
 The ceremony is a wonderful creative affair with just a hint of spirituality and a whole lot of love. The rings are given, vows are made, you definitely cried at some point (possibly due to Karen stepping on your foot in her heels).
   * [Aww, this is all very nice.]
 - The celebrations continue into the evening until it's time to eat!
@@ -200,6 +206,7 @@ Wow! Lucky you told me because this is a sandwich made entirely of {diet}. # {"s
 
 == eatfood
 You enjoy the food and the company, meeting all the relatives and friends of the wedding. Laughing and drinking maybe too much, but hey, it's a wedding!
+# { "cmd": "SONG_DANCE" }
 You hear some loud music and realize that a dance-floor is forming.
   * [Join the dancing]
   -> dancefloor
@@ -231,7 +238,7 @@ THE END.
 
 == dancefloor
 The dance-floor is heaving with hits from the 90's.
-  * Shuffle to the DJ booth
+  * [Shuffle to the DJ booth]
     You shuffle and swing your way through the crowd to the DJ booth.
     * * Play Jesse's Girl! # {"sender": 2 }
       The DJ doesn't have time to respond because a shoe comes flying through the air, hitting you in the head!
@@ -243,7 +250,7 @@ The dance-floor is heaving with hits from the 90's.
       This is a really good song list and you're doing a great job! # { "sender": 2 }
       Thank you! The couple put in a lot of effort to please the crowd and thanks for respecting their taste by not requesting a song!  # { "sender": 1 }
       Back to the dancefloor.
-  * Swing to the center floor
+  * [Swing to the center floor]
     You swing and shuffle through the crowd to the centre of the dance-floor
 - Time for your signature move:
   * The Two-step
@@ -256,6 +263,7 @@ The dance-floor is heaving with hits from the 90's.
     ~ dance = "Charleston"
     You kick your feet up, swinging back and forth. You find a partner and they do the Charleston too, but not too close because we have to leave room for Jesus.
 - The DJ sees your move and immediately stops the music.
+# { "cmd": "SONG_PARTYAMBIENCE" }
   * [...]
 - The guests stop dancing and you hear whispers among the crowd:
 Did you see that move! # { "sender": 1 }
@@ -263,6 +271,7 @@ Oh wow, are they a professional dancer? # { "sender": 1 }
 I'm in shock at how smooth those moves were! # { "sender": 1 }
   * [...]
 - The DJ's mouth is agape, but they recompose themselves and resume the music again. Dancing ensues.
+# { "cmd": "SONG_DANCE" }
 The DJ motions for you to come over.
 That was an amazing move! I've never seen anything like that in all my life! # { "sender": 1 }
   * Thank you, I call it the {dance}. # { "sender": 2 }
