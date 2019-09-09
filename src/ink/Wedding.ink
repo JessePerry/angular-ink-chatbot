@@ -1,4 +1,4 @@
-VAR name = "JesseTest"
+VAR name = "---"
 VAR nameEntry = ""
 VAR nameLowerAlpha = ""
 VAR dress = 0 // 1 cocktail, 2 space
@@ -32,6 +32,7 @@ You head to the entrance
 === entry ===
 # { "cmd": "SONG_OUTDOOR" }
 <img src="assets/images/Biota.png">
+The sounds of spring are in the air (Turn your volume up to hear it).
   * [...]
 - A smartly dressed man greets you at the front door.
 <img src="assets/images/dom-212x381.png">
@@ -57,6 +58,7 @@ His tone suddenly reflects your seriousness.
 === askName ===
 A clipboard has appeared in the his arms out of nowhere. You wonder if he's some kind of magician?
 Could I please get your name? # { "sender": 1 }
+(Type your name, then press Return.)
 -> enterName
 
 === enterName
