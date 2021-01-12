@@ -1,5 +1,8 @@
 # Wedding RSVP fork 💍
 
+The game is hosted here as a GitHub Page https://jesseperry.github.io/ink-wedding-game/
+The release is under /docs
+
 This is a fork to re-design neoskop's awesome chat bot into an interactive rsvp form for a wedding.
 
 ![Wedding Game Screenshot](/release/Screenshot01.png?raw=true "Wedding Game Desktop Browser Screenshot")
