@@ -2,6 +2,8 @@
 
 This is a fork to re-design neoskop's awesome chat bot into an interactive rsvp form for a wedding.
 
+![Wedding Game Screenshot](/release/Screenshot01.png?raw=true "Wedding Game Desktop Browser Screenshot")
+
 # Chatbot with Angular and Ink
 
 Learn more about the project here: [https://www.neoskop.de/blog/simple-chatbots-with-angular-and-ink](https://www.neoskop.de/blog/simple-chatbots-with-angular-and-ink)
